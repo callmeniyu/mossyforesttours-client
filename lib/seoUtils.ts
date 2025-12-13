@@ -9,12 +9,12 @@ export const SEO_KEYWORDS = {
     'Mossy Forest Brinchang',
     'Gunung Brinchang viewpoint',
     'BOH Tea Plantation',
-    'Taman Negara', 
+    'Taman Negara',
     'Kuala Besut',
     'Perhentian Islands',
     'Kuala Lumpur'
   ],
-  
+
   // Tour-specific keywords
   tours: [
     'Mossy Forest tour',
@@ -57,7 +57,7 @@ export const SEO_KEYWORDS = {
     'Adventure tours Cameron Highlands',
     'Half day tours Cameron Highlands'
   ],
-  
+
   // Transfer-specific keywords  
   transfers: [
     // Priority route keywords (most searched) - UPDATED WITH ALL VARIATIONS
@@ -69,7 +69,7 @@ export const SEO_KEYWORDS = {
     'Cameron Highlands Taman Negara transport',
     'Van from Cameron Highlands to Taman Negara',
     'Minivan Cameron Highlands to Taman Negara',
-    
+
     // Taman Negara to Cameron Highlands (reverse)
     'Bus from Taman Negara to Cameron Highlands',
     'Transfer from Taman Negara to Cameron Highlands',
@@ -77,7 +77,7 @@ export const SEO_KEYWORDS = {
     'Taman Negara to Cameron Highlands transfer',
     'Taman Negara Cameron Highlands transport',
     'Van from Taman Negara to Cameron Highlands',
-    
+
     // Kuala Besut to Cameron Highlands
     'Bus from Kuala Besut Jetty to Cameron Highlands',
     'Transfer from Kuala Besut Jetty to Cameron Highlands',
@@ -86,7 +86,7 @@ export const SEO_KEYWORDS = {
     'Kuala Besut Cameron Highlands transport',
     'Van from Kuala Besut to Cameron Highlands',
     'Kuala Besut jetty transfer',
-    
+
     // Cameron Highlands to Perhentian Islands
     'Cameron Highlands to Perhentian Islands transfer',
     'Cameron Highlands to Perhentian Islands bus',
@@ -95,12 +95,12 @@ export const SEO_KEYWORDS = {
     'Cameron Highlands to Perhentian ferry',
     'Van and ferry Cameron Highlands to Perhentian',
     'Transfer from Cameron Highlands to Perhentian',
-    
+
     // Cameron Highlands to Kuala Besut (for Perhentian connection)
     'Cameron Highlands to Kuala Besut transfer',
     'Cameron Highlands to Kuala Besut bus',
     'Cameron Highlands to Kuala Besut jetty',
-    
+
     // Core transfer services
     'Cameron Highlands transfer service',
     'Minivan transfer Cameron Highlands to Kuala Besut',
@@ -115,7 +115,7 @@ export const SEO_KEYWORDS = {
     'Taman Negara transfer van Cameron Highlands',
     'Kuala Besut jetty van transfer',
     'Private tour from Kuala Lumpur to Cameron Highlands',
-    
+
     // Popular routes and destinations
     'Cameron Highlands to Kuala Lumpur transfer',
     'Cameron Highlands to KLIA airport transfer',
@@ -129,7 +129,7 @@ export const SEO_KEYWORDS = {
     'Cameron Highlands to Cherating transfer',
     'Cameron Highlands to Kuantan transfer',
     'Cameron Highlands shuttle service',
-    
+
     // Transport types and features
     'air conditioned van Cameron Highlands',
     'comfortable minivan transfer',
@@ -143,7 +143,7 @@ export const SEO_KEYWORDS = {
     'licensed transfer operator',
     'experienced driver transfer',
     'luggage included transfer',
-    
+
     // Ferry combinations
     'Cameron Highlands Perhentian ferry combo',
     'mainland to island transfer package',
@@ -151,7 +151,7 @@ export const SEO_KEYWORDS = {
     'Perhentian fast boat booking',
     'island hopping transfer',
     'ferry schedule Cameron Highlands',
-    
+
     // Booking and convenience
     'online van booking Cameron Highlands',
     'instant confirmation transfer',
@@ -162,7 +162,7 @@ export const SEO_KEYWORDS = {
     'backpacker transfer Cameron Highlands',
     'tourist transfer Malaysia'
   ],
-  
+
   // Service-related keywords
   services: [
     'Tours and transfers Cameron Highlands',
@@ -175,7 +175,7 @@ export const SEO_KEYWORDS = {
     'Intimate group adventure tour Cameron Highlands',
     'Pick up from hostel tour Cameron Highlands'
   ],
-  
+
   // Visitor info keywords
   visitorInfo: [
     'Mossy Forest parking',
@@ -188,11 +188,11 @@ export const SEO_KEYWORDS = {
     'Mossy Forest location',
     'Mossy Forest Cameron Highlands map'
   ],
-  
+
   // Price/booking related
   pricing: [
     'Mossy Forest entrance fee',
-    'Mossy Forest ticket price', 
+    'Mossy Forest ticket price',
     'Mossy Forest Cameron Highlands fees',
     'Mossy Forest admission cost',
     'Book private van transfer Cameron Highlands online',
@@ -209,11 +209,11 @@ export const SOCIAL_LINKS = {
 
 // Website constants
 export const SITE_CONFIG = {
-  name: 'Oastel',
-  title: 'Oastel - Cameron Highlands Tours, Mossy Forest & Sunrise Tours',
-  description: 'Discover Cameron Highlands with Oastel\'s budget-friendly tours and transfers. From Mossy Forest tours to sunrise viewpoint tours, we offer private and shared adventures across Cameron Highlands.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://oastel.com', // Update with actual domain
-  author: 'Oastel Team',
+  name: 'Cameron Highlands Tours',
+  title: 'Cameron Highlands Tours - Mossy Forest, Sunrise & Transfers',
+  description: 'Discover Cameron Highlands with our premium tours and transfers. From Mossy Forest adventures to sunrise viewpoint tours and reliable transfers to Taman Negara & Perhentian Islands.',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cameronhighlandstours.com', // Updated fallback domain
+  author: 'Cameron Highlands Tours Team',
   keywords: [
     ...SEO_KEYWORDS.destinations,
     ...SEO_KEYWORDS.tours.slice(0, 15), // First 15 tour keywords
@@ -245,7 +245,7 @@ export function generateKeywords(
   location?: string
 ): string[] {
   const keywords = [...baseKeywords, ...SITE_CONFIG.keywords];
-  
+
   // Add content-specific keywords
   if (contentType === 'tour') {
     keywords.push(...SEO_KEYWORDS.tours.slice(0, 20), ...SEO_KEYWORDS.visitorInfo.slice(0, 5));
@@ -254,12 +254,12 @@ export function generateKeywords(
   } else if (contentType === 'blog') {
     keywords.push(...SEO_KEYWORDS.tours.slice(0, 10), ...SEO_KEYWORDS.visitorInfo.slice(0, 5));
   }
-  
+
   // Add location-specific keywords if provided
   if (location) {
     keywords.push(`${location} tour`, `${location} transfer`, `visit ${location}`);
   }
-  
+
   // Remove duplicates and limit to 30 keywords max
   return [...new Set(keywords)].slice(0, 30);
 }
@@ -303,8 +303,8 @@ export function generateTransferStructuredData(transfer: any) {
     description: stripHtmlTags(transfer.description || transfer.desc),
     image: transfer.image ? resolveImageUrl(transfer.image) : `${SITE_CONFIG.url}/images/og-default.jpg`,
     serviceType: 'Transportation Service',
-    category: transfer.type === 'Private' ? 'Private Transfer' : 
-              transfer.type === 'Van + Ferry' ? 'Combined Transport' : 'Shared Transfer',
+    category: transfer.type === 'Private' ? 'Private Transfer' :
+      transfer.type === 'Van + Ferry' ? 'Combined Transport' : 'Shared Transfer',
     keywords: [
       `bus ${transfer.from} ${transfer.to}`,
       `transfer ${transfer.from} ${transfer.to}`,
@@ -428,13 +428,13 @@ export function generateTwitterCard(
 export function generateTourMetadata(tour: any): Metadata {
   // Extract destination from title or tags
   const destination = extractDestination(tour.title, tour.tags) || 'Cameron Highlands';
-  
-  const title = `${tour.title} | ${tour.type === 'private' ? 'Private' : 'Shared'} Tour in ${destination} - Oastel`;
+
+  const title = `${tour.title} | ${tour.type === 'private' ? 'Private' : 'Shared'} Tour in ${destination} - Cameron Highlands Tours`;
   const description = truncateText(
     stripHtmlTags(tour.description || tour.desc || `Explore ${destination} with our ${tour.type} tour. ${tour.title} - Book now for an unforgettable adventure.`),
     160
   );
-  
+
   const keywords = generateKeywords(
     [tour.title, ...(tour.tags || [])],
     'tour',
@@ -460,35 +460,35 @@ export function generateTourMetadata(tour: any): Metadata {
 // Helper function to extract destination from title and tags
 function extractDestination(title: string, tags: string[] = []): string | null {
   const allText = [title, ...tags].join(' ').toLowerCase();
-  
+
   const destinations = [
     'cameron highlands',
-    'taman negara', 
+    'taman negara',
     'kuala besut',
     'perhentian islands',
     'kuala lumpur',
     'pahang',
     'mossy forest'
   ];
-  
+
   for (const dest of destinations) {
     if (allText.includes(dest)) {
       // Return properly capitalized destination
-      return dest.split(' ').map(word => 
+      return dest.split(' ').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' ');
     }
   }
-  
+
   return null;
 }
 
 // Main function to generate complete metadata for transfers
 export function generateTransferMetadata(transfer: any): Metadata {
   // Create more descriptive title based on transfer type and route
-  const transferType = transfer.type === 'Private' ? 'Private' : 
-                     transfer.type === 'Van + Ferry' ? 'Van + Ferry' : 'Shared Van';
-  
+  const transferType = transfer.type === 'Private' ? 'Private' :
+    transfer.type === 'Van + Ferry' ? 'Van + Ferry' : 'Shared Van';
+
   // Generate search-optimized title variations
   const routeVariations = [
     `Bus from ${transfer.from} to ${transfer.to}`,
@@ -496,21 +496,21 @@ export function generateTransferMetadata(transfer: any): Metadata {
     `${transfer.from} to ${transfer.to} bus`,
     `${transfer.from} to ${transfer.to} transfer`,
   ];
-  
-  const title = `${transfer.title} | ${transferType} Transfer from ${transfer.from} to ${transfer.to} - Oastel`;
-  
+
+  const title = `${transfer.title} | ${transferType} Transfer from ${transfer.from} to ${transfer.to} - Cameron Highlands Tours`;
+
   // Enhanced description with route details and benefits
   const baseDescription = stripHtmlTags(transfer.description || transfer.desc || '');
   const routeInfo = `Comfortable ${transferType.toLowerCase()} transfer from ${transfer.from} to ${transfer.to}`;
-  const features = transfer.type === 'Private' ? 
+  const features = transfer.type === 'Private' ?
     'Private vehicle, flexible timing, door-to-door service' :
     transfer.type === 'Van + Ferry' ?
-    'Combined van and ferry service, seamless island connection' :
-    'Shared van service, budget-friendly, reliable schedule';
-  
-  const description = baseDescription || 
-    `${routeInfo}. ${features}. Book your Cameron Highlands transfer with Oastel for a safe and comfortable journey.`;
-  
+      'Combined van and ferry service, seamless island connection' :
+      'Shared van service, budget-friendly, reliable schedule';
+
+  const description = baseDescription ||
+    `${routeInfo}. ${features}. Book your Cameron Highlands transfer with Cameron Highlands Tours for a safe and comfortable journey.`;
+
   // Enhanced keywords based on route and type - NOW INCLUDING HIGH-PRIORITY SEARCH TERMS
   const routeKeywords = [
     ...routeVariations, // Include all search variations
@@ -523,13 +523,13 @@ export function generateTransferMetadata(transfer: any): Metadata {
     `${transfer.from} ${transfer.to} taxi`,
     `${transfer.from} ${transfer.to} shuttle service`,
   ];
-  
-  const typeKeywords = transfer.type === 'Private' ? 
+
+  const typeKeywords = transfer.type === 'Private' ?
     ['private transfer', 'private van', 'door to door transfer', 'flexible transfer', 'private minivan'] :
     transfer.type === 'Van + Ferry' ?
-    ['ferry transfer', 'island transfer', 'boat van combo', 'ferry van package', 'van ferry service', 'combined transport'] :
-    ['shared van', 'budget transfer', 'economy transfer', 'group transfer', 'shared minivan'];
-  
+      ['ferry transfer', 'island transfer', 'boat van combo', 'ferry van package', 'van ferry service', 'combined transport'] :
+      ['shared van', 'budget transfer', 'economy transfer', 'group transfer', 'shared minivan'];
+
   const keywords = generateKeywords(
     [transfer.title, ...routeKeywords, ...typeKeywords, ...(transfer.tags || [])],
     'transfer',
@@ -561,7 +561,7 @@ export function generatePageMetadata(
 ): Metadata {
   const fullTitle = `${title} - ${SITE_CONFIG.name}`;
   const metaKeywords = generateKeywords(keywords, 'general');
-  
+
   return {
     title: fullTitle,
     description: truncateText(description, 160),
@@ -577,12 +577,12 @@ export function generatePageMetadata(
 
 // Main function to generate complete metadata for blogs
 export function generateBlogMetadata(blog: any): Metadata {
-  const title = `${blog.title} | ${blog.category} Blog - Oastel`;
+  const title = `${blog.title} | ${blog.category} Blog - Cameron Highlands Tours`;
   const description = truncateText(
-    stripHtmlTags(blog.description || blog.content || `Read about ${blog.title} on Oastel's blog. Discover travel tips, destination guides, and more.`),
+    stripHtmlTags(blog.description || blog.content || `Read about ${blog.title} on Cameron Highlands Tours blog. Discover travel tips, destination guides, and more.`),
     160
   );
-  
+
   const keywords = generateKeywords(
     [blog.title, blog.category, ...(blog.tags || [])],
     'blog',
