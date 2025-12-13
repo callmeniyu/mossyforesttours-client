@@ -1,5 +1,5 @@
 import mongoose, { Document } from "mongoose"
-import dbConnect from "@/lib/dbConnect"
+
 
 export interface IUser extends Document {
     name: string

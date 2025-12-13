@@ -1,10 +1,6 @@
 import mongoose from "mongoose"
 
-const MONGODB_URI = process.env.MONGODB_URI as string
-
-if (!MONGODB_URI) {
-    throw new Error("Please define the MONGODB_URI environment variable")
-}
+// MONGODB_URI check moved inside dbConnect function
 
 interface MongooseGlobal {
     conn: typeof mongoose | null
@@ -27,6 +23,12 @@ cached = cached ?? { conn: null, promise: null }
 globalThis.mongooseGlobal = cached
 
 async function dbConnect(): Promise<typeof mongoose> {
+    const MONGODB_URI = process.env.MONGODB_URI as string
+
+    if (!MONGODB_URI) {
+        throw new Error("Please define the MONGODB_URI environment variable")
+    }
+
     if (!cached) {
         throw new Error("Mongoose cache is not initialized")
     }
