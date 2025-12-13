@@ -244,7 +244,7 @@ export function generateKeywords(
   contentType: 'tour' | 'transfer' | 'general' | 'blog' = 'general',
   location?: string
 ): string[] {
-  let keywords = [...baseKeywords, ...SITE_CONFIG.keywords];
+  const keywords = [...baseKeywords, ...SITE_CONFIG.keywords];
   
   // Add content-specific keywords
   if (contentType === 'tour') {
