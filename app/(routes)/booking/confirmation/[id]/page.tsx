@@ -214,11 +214,11 @@ export default function BookingConfirmationPage() {
             if (element.classList.contains("bg-accent")) {
               element.style.backgroundColor = "#E2A45A";
             }
-            
+
             if (element.classList.contains("text-accent")) {
               element.style.color = "#E2A45A";
             }
-            
+
             if (element.classList.contains("text-primary")) {
               element.style.color = "#0F172A";
             }
@@ -565,11 +565,15 @@ export default function BookingConfirmationPage() {
 
         {/* Booking Details */}
         <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-          <h3 className="text-xl font-semibold mb-4 text-primary">Booking Details</h3>
+          <h3 className="text-xl font-semibold mb-4 text-primary">
+            Booking Details
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
               <Calendar className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-              <p className="font-semibold text-gray-800">{formatDate(booking.date)}</p>
+              <p className="font-semibold text-gray-800">
+                {formatDate(booking.date)}
+              </p>
             </div>
             <div className="flex items-start gap-3">
               <Clock className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
@@ -607,11 +611,15 @@ export default function BookingConfirmationPage() {
 
         {/* Contact Information */}
         <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-          <h3 className="text-xl font-semibold mb-4 text-primary">Contact Information</h3>
+          <h3 className="text-xl font-semibold mb-4 text-primary">
+            Contact Information
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
               <Users className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-              <p className="font-semibold text-gray-800">{booking.contactInfo.name}</p>
+              <p className="font-semibold text-gray-800">
+                {booking.contactInfo.name}
+              </p>
             </div>
             <div className="flex items-start gap-3">
               <Mail className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
@@ -623,7 +631,9 @@ export default function BookingConfirmationPage() {
             </div>
             <div className="flex items-start gap-3">
               <MapPin className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-              <p className="text-gray-800">{stripHtmlTags(booking.pickupLocation || "")}</p>
+              <p className="text-gray-800">
+                {stripHtmlTags(booking.pickupLocation || "")}
+              </p>
             </div>
           </div>
         </div>
