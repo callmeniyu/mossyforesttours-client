@@ -36,9 +36,6 @@ export default function Footer() {
           <h4 className="font-semibold text-text-primary mb-3">Support</h4>
           <ul className="space-y-2 text-sm text-text-secondary">
             <li>
-              <a href="/contact-us">Contact Us</a>
-            </li>
-            <li>
               <a href="/faqs">FAQs</a>
             </li>
             <li>

@@ -1,11 +1,9 @@
 "use client";
 
 import { useBooking } from "@/context/BookingContext";
-import { useCart } from "@/context/CartContext";
-import { cartBookingApi } from "@/lib/cartBookingApi";
 import BookingInfoPanel from "@/components/ui/BookingInfoPanel";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useToast } from "@/context/ToastContext";
 import SessionHook from "@/hooks/SessionHook";
 
@@ -13,14 +11,9 @@ type Country = { name: string; cca2: string; callingCode: string };
 
 export default function BookingUserInfoPage() {
   const { booking } = useBooking();
-  const { cart, clearCart } = useCart();
   const router = useRouter();
   const { showToast } = useToast();
   const { user, isAuthenticated } = SessionHook();
-  const searchParams = useSearchParams();
-
-  // Check if this is a cart booking
-  const isCartBooking = searchParams.get("from") === "cart";
 
   const [form, setForm] = useState({
     name: "",
@@ -33,10 +26,6 @@ export default function BookingUserInfoPage() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Used to temporarily suppress the auto-redirect to /cart when we
-  // intentionally clear the cart after navigating to confirmation.
-  const skipCartRedirectRef = useRef(false);
-
   // Form validation function
   const isFormValid = () => {
     const basicFieldsValid =
@@ -45,30 +34,16 @@ export default function BookingUserInfoPage() {
       form.phone.trim() !== "" &&
       form.countryCode.trim() !== "";
 
-    if (isCartBooking) {
-      // For cart bookings, pickup location is handled per item
-      return basicFieldsValid;
-    }
-
-    // For single bookings, always require pickup location
+    // Always require pickup location
     return basicFieldsValid && form.pickupLocation.trim() !== "";
   };
 
   useEffect(() => {
-    if (isCartBooking) {
-      // For cart bookings, check if cart exists and has items
-      if (!cart || cart.items.length === 0) {
-        // If we set the skip flag (we're navigating to confirmation), do not replace
-        if (skipCartRedirectRef.current) return;
-        router.replace("/cart");
-      }
-    } else {
-      // For single bookings, check if booking exists
-      if (!booking) {
-        router.replace("/");
-      }
+    // Check if booking exists
+    if (!booking) {
+      router.replace("/");
     }
-  }, [booking, cart, isCartBooking, router]);
+  }, [booking, router]);
 
   useEffect(() => {
     // Comprehensive country list with all major countries (sorted with Malaysia first)
@@ -182,83 +157,8 @@ export default function BookingUserInfoPage() {
       return;
     }
 
-    if (isCartBooking) {
-      // Handle cart booking payment flow
-      return handleCartBookingPayment();
-    }
-
     // Handle single booking payment flow
     return handleSingleBookingPayment();
-  };
-
-  const handleCartBookingPayment = async () => {
-    if (!cart || cart.items.length === 0) {
-      showToast({
-        type: "error",
-        title: "Error",
-        message: "No items in cart",
-      });
-      return;
-    }
-
-    if (!user?.email) {
-      console.error("User email not found in session:", user);
-      showToast({
-        type: "error",
-        title: "Authentication Error",
-        message: "User email not found. Please try logging in again.",
-      });
-      return;
-    }
-
-    console.log("[CART_PAYMENT] Preparing cart payment flow...");
-
-    try {
-      setIsLoading(true);
-
-      const contactInfo = {
-        name: form.name,
-        email: form.email,
-        phone: `${form.countryCode}${form.phone}`,
-        whatsapp: `${form.countryCode}${form.phone}`,
-      };
-
-      const cartData = {
-        ...cart,
-        userEmail: user.email,
-      };
-
-      // Calculate total with bank charges
-      const subtotal = getCartTotal();
-      const bankCharge = subtotal * 0.028;
-      const totalAmount = subtotal + bankCharge;
-
-      console.log("[CART_PAYMENT] Cart payment data:", {
-        subtotal,
-        bankCharge,
-        totalAmount,
-        itemCount: cart.items.length,
-      });
-
-      // Redirect to payment page with cart data
-      const paymentUrl = `/payment?${new URLSearchParams({
-        amount: totalAmount.toFixed(2),
-        cartData: encodeURIComponent(JSON.stringify(cartData)),
-        contactInfo: encodeURIComponent(JSON.stringify(contactInfo)),
-      })}`;
-
-      console.log("[CART_PAYMENT] Redirecting to payment:", paymentUrl);
-      router.push(paymentUrl);
-    } catch (error: any) {
-      console.error("Cart payment preparation error:", error);
-      showToast({
-        type: "error",
-        title: "Error",
-        message: error.message || "An error occurred while preparing payment",
-      });
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const handleSingleBookingPayment = async () => {
@@ -336,38 +236,13 @@ export default function BookingUserInfoPage() {
     handleConfirmBooking();
   };
 
-  // Calculate total for cart bookings
-  const getCartTotal = () => {
-    if (!cart || !cart.items) return 0;
-    return cart.items.reduce(
-      (total, item) => total + (item.totalPrice || 0),
-      0
-    );
-  };
-
-  const getCartItemCount = () => {
-    if (!cart || !cart.items) return 0;
-    return cart.items.length;
-  };
-
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-12 py-6 grid grid-cols-1 md:grid-cols-3 gap-8 font-poppins">
       {/* Form Section */}
       <div className="md:col-span-2 order-1 md:-order-1">
         <h2 className="text-primary_green text-2xl font-bold mb-6">
-          {isCartBooking ? "Complete your cart booking" : "Fill your details"}
+          Fill your details
         </h2>
-
-        {isCartBooking && cart && cart.items.length > 0 && (
-          <div className="mb-6 p-4 bg-green-50 border border-primary_green/40 rounded-lg">
-            <h3 className="font-semibold text-primary_green mb-2">
-              Booking {getCartItemCount()} item(s) from your cart
-            </h3>
-            <p className="text-sm text-gray-700">
-              Total Amount: RM {getCartTotal().toFixed(2)}
-            </p>
-          </div>
-        )}
 
         <div className="space-y-4">
           {/* Name and Email */}
@@ -386,99 +261,95 @@ export default function BookingUserInfoPage() {
           ))}
 
           {/* Pickup Location - Always show as text input for user to enter their pickup address */}
-          {!isCartBooking && (
-            <>
-              <div className="w-full">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Pickup Location:
-                </label>
-                <input
-                  name="pickupLocation"
-                  value={form.pickupLocation}
-                  onChange={handleChange}
-                  placeholder="Enter your Hostel/Hotel name and complete address"
-                  className="w-full border border-primary_green/40 rounded px-4 py-2 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-primary_green"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Please provide your complete pickup address including
-                  hotel/hostel name
-                </p>
-              </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Pickup Location:
+            </label>
+            <input
+              name="pickupLocation"
+              value={form.pickupLocation}
+              onChange={handleChange}
+              placeholder="Enter your Hostel/Hotel name and complete address"
+              className="w-full border border-primary_green/40 rounded px-4 py-2 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-primary_green"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Please provide your complete pickup address including hotel/hostel
+              name
+            </p>
 
-              {/* Display pickup guidelines/locations */}
-              {(() => {
-                // For transfers: Show only pickup guidelines
-                if (booking?.packageType === "transfer") {
-                  const transferGuidelines =
-                    booking?.pickupOption === "admin"
-                      ? (booking as any)?.details?.pickupGuidelines
-                      : booking?.pickupLocations;
+            {/* Display pickup guidelines/locations */}
+            {(() => {
+              // For transfers: Show only pickup guidelines
+              if (booking?.packageType === "transfer") {
+                const transferGuidelines =
+                  booking?.pickupOption === "admin"
+                    ? (booking as any)?.details?.pickupGuidelines
+                    : booking?.pickupLocations;
 
-                  if (transferGuidelines) {
-                    return (
-                      <div className="mt-3">
-                        <div className="p-3 bg-green-50 border border-primary_green/40 rounded">
-                          <h5 className="font-medium text-primary_green mb-2 text-sm">
-                            Pickup Guidelines:
-                          </h5>
-                          <div
-                            className="prose max-w-none text-sm text-gray-700 leading-relaxed"
-                            dangerouslySetInnerHTML={{
-                              __html: transferGuidelines,
-                            }}
-                          />
-                        </div>
+                if (transferGuidelines) {
+                  return (
+                    <div className="mt-3">
+                      <div className="p-3 bg-green-50 border border-primary_green/40 rounded">
+                        <h5 className="font-medium text-primary_green mb-2 text-sm">
+                          Pickup Guidelines:
+                        </h5>
+                        <div
+                          className="prose max-w-none text-sm text-gray-700 leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html: transferGuidelines,
+                          }}
+                        />
                       </div>
-                    );
-                  }
+                    </div>
+                  );
                 }
+              }
 
-                // For tours: Show both pickup locations and pickup guidelines
-                if (booking?.packageType === "tour") {
-                  const tourLocations = booking?.pickupLocations;
-                  const tourGuidelines = (booking as any)?.details
-                    ?.pickupGuidelines;
+              // For tours: Show both pickup locations and pickup guidelines
+              if (booking?.packageType === "tour") {
+                const tourLocations = booking?.pickupLocations;
+                const tourGuidelines = (booking as any)?.details
+                  ?.pickupGuidelines;
 
-                  if (tourLocations || tourGuidelines) {
-                    return (
-                      <div className="mt-3">
-                        <div className="p-3 bg-green-50 border border-primary_green/40 rounded">
-                          {tourLocations && (
-                            <div className="mb-3">
-                              <h5 className="font-medium text-primary_green mb-2 text-sm">
-                                Available Pickup Locations:
-                              </h5>
-                              <div
-                                className="prose max-w-none text-sm text-gray-700"
-                                dangerouslySetInnerHTML={{
-                                  __html: tourLocations,
-                                }}
-                              />
-                            </div>
-                          )}
-                          {tourGuidelines && (
-                            <div>
-                              <h5 className="font-medium text-primary_green mb-2 text-sm">
-                                Pickup Guidelines:
-                              </h5>
-                              <div
-                                className="prose max-w-none text-sm text-gray-700 leading-relaxed"
-                                dangerouslySetInnerHTML={{
-                                  __html: tourGuidelines,
-                                }}
-                              />
-                            </div>
-                          )}
-                        </div>
+                if (tourLocations || tourGuidelines) {
+                  return (
+                    <div className="mt-3">
+                      <div className="p-3 bg-green-50 border border-primary_green/40 rounded">
+                        {tourLocations && (
+                          <div className="mb-3">
+                            <h5 className="font-medium text-primary_green mb-2 text-sm">
+                              Available Pickup Locations:
+                            </h5>
+                            <div
+                              className="prose max-w-none text-sm text-gray-700"
+                              dangerouslySetInnerHTML={{
+                                __html: tourLocations,
+                              }}
+                            />
+                          </div>
+                        )}
+                        {tourGuidelines && (
+                          <div>
+                            <h5 className="font-medium text-primary_green mb-2 text-sm">
+                              Pickup Guidelines:
+                            </h5>
+                            <div
+                              className="prose max-w-none text-sm text-gray-700 leading-relaxed"
+                              dangerouslySetInnerHTML={{
+                                __html: tourGuidelines,
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
-                    );
-                  }
+                    </div>
+                  );
                 }
+              }
 
-                return null;
-              })()}
-            </>
-          )}
+              return null;
+            })()}
+          </div>
 
           {/* WhatsApp Number Section */}
           <div>
@@ -521,80 +392,32 @@ export default function BookingUserInfoPage() {
           disabled={isLoading || !isFormValid()}
           className="mt-6 w-full sm:w-auto px-6 py-3 bg-primary_green text-white rounded-md hover:bg-primary_green/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading
-            ? isCartBooking
-              ? "Creating Bookings..."
-              : "Creating Booking..."
-            : isCartBooking
-            ? "Confirm Cart Booking"
-            : "Confirm Booking"}
+          {isLoading ? "Creating Booking..." : "Confirm Booking"}
         </button>
       </div>
 
       {/* Booking Summary Panel */}
-      {isCartBooking && cart ? (
+      {booking && (
         <div className="w-full">
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Cart Summary
-            </h3>
-
-            <div className="space-y-3 mb-4">
-              {cart.items.map((item, index) => (
-                <div key={item._id} className="flex justify-between text-sm">
-                  <span className="flex-1 truncate">
-                    {(item as any).packageTitle || `Item ${index + 1}`}
-                  </span>
-                  <span className="font-medium">
-                    RM {item.totalPrice.toFixed(2)}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="border-t pt-4">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">
-                  Total ({getCartItemCount()} items)
-                </span>
-                <span className="font-bold text-primary_green text-lg">
-                  RM {getCartTotal().toFixed(2)}
-                </span>
-              </div>
-            </div>
-
-            <button
-              onClick={goToCheckout}
-              disabled={isLoading || !isFormValid()}
-              className="w-full mt-4 px-4 py-2 bg-primary_green text-white rounded-md hover:bg-primary_green/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Processing..." : "Confirm Booking"}
-            </button>
-          </div>
+          <BookingInfoPanel
+            title={booking.title}
+            date={new Date(booking.date)}
+            time={booking.time}
+            type={booking.type}
+            duration={booking.duration}
+            adults={booking.adults}
+            children={booking.children}
+            adultPrice={booking.adultPrice}
+            childPrice={booking.childPrice}
+            userInfo={true}
+            totalPrice={booking.totalPrice}
+            packageType={booking.packageType}
+            onClick={goToCheckout}
+            isVehicleBooking={booking.isVehicleBooking}
+            vehicleSeatCapacity={booking.vehicleSeatCapacity}
+            vehicleName={booking.vehicleName}
+          />
         </div>
-      ) : (
-        booking && (
-          <div className="w-full">
-            <BookingInfoPanel
-              title={booking.title}
-              date={new Date(booking.date)}
-              time={booking.time}
-              type={booking.type}
-              duration={booking.duration}
-              adults={booking.adults}
-              children={booking.children}
-              adultPrice={booking.adultPrice}
-              childPrice={booking.childPrice}
-              userInfo={true}
-              totalPrice={booking.totalPrice}
-              packageType={booking.packageType}
-              onClick={goToCheckout}
-              isVehicleBooking={booking.isVehicleBooking}
-              vehicleSeatCapacity={booking.vehicleSeatCapacity}
-              vehicleName={booking.vehicleName}
-            />
-          </div>
-        )
       )}
     </div>
   );

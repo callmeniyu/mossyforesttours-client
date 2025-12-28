@@ -4,7 +4,7 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { BookingProvider } from "@/context/BookingContext";
 import { ToastProvider } from "@/context/ToastContext";
-import { CartProvider } from "@/context/CartContext";
+import { CurrencyProvider } from "@/context/CurrencyContext";
 import AuthSessionProvider from "@/components/providers/SessionProvider";
 import {
   SITE_CONFIG,
@@ -117,13 +117,13 @@ export default function RootLayout({
       <body className={`font-poppins`}>
         <AuthSessionProvider>
           <ToastProvider>
-            <CartProvider>
+            <CurrencyProvider>
               <Navbar />
               <main>
                 <BookingProvider>{children}</BookingProvider>
               </main>
               <Footer />
-            </CartProvider>
+            </CurrencyProvider>
           </ToastProvider>
         </AuthSessionProvider>
       </body>

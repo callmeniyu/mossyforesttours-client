@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiClock } from "react-icons/fi";
 import { IoStar } from "react-icons/io5";
+import { useCurrency } from "@/context/CurrencyContext";
 
 type ModernTourCardHomeProps = {
   id: string;
@@ -18,6 +19,7 @@ type ModernTourCardHomeProps = {
   reviewCount: number;
   label?: string;
   category: string;
+  bookedCount?: number | string;
 };
 
 export default function ModernTourCardHome({
@@ -33,7 +35,10 @@ export default function ModernTourCardHome({
   reviewCount,
   label,
   category,
+  bookedCount,
 }: ModernTourCardHomeProps) {
+  const { convertToUSD, convertToEUR } = useCurrency();
+
   const getLabelStyles = (labelType: string) => {
     switch (labelType) {
       case "Best Seller":
@@ -101,7 +106,7 @@ export default function ModernTourCardHome({
               {duration}
             </div>
             <span className="text-xs font-semibold text-gray-800">
-              10k+ booked
+              {bookedCount}+ booked
             </span>
           </div>
 
@@ -126,9 +131,9 @@ export default function ModernTourCardHome({
                 <span className="text-text-secondary text-xs">/person</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-text-secondary">
-                <span>${Math.round(price * 0.22)}</span>
+                <span>${convertToUSD(price)}</span>
                 <span>•</span>
-                <span>€{Math.round(price * 0.21)}</span>
+                <span>€{convertToEUR(price)}</span>
               </div>
             </div>
             <div className="flex flex-col items-end gap-2">

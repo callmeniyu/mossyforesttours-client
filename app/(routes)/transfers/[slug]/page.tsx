@@ -22,6 +22,8 @@ import {
 } from "@/lib/seoUtils";
 import TransferSEOLinks from "@/components/ui/TransferSEOLinks";
 import { calculateOfferPercentage } from "@/lib/utils";
+import ReviewSection from "@/components/sections/ReviewSection";
+import TransferPriceDisplay from "@/components/ui/TransferPriceDisplay";
 
 // Enable ISR with 5 minute revalidation for fresh data
 export const revalidate = 300;
@@ -210,10 +212,7 @@ export default async function TransferDetailPage({
                   {transferDetails.type === "Private" ? "/vehicle" : "/person"}
                 </span>
               </h2>
-              <div className="text-sm text-gray-600 mt-1">
-                ${Math.round(transferDetails.newPrice * 0.22)} / €
-                {Math.round(transferDetails.newPrice * 0.21)}
-              </div>
+              <TransferPriceDisplay price={transferDetails.newPrice} />
               <div className="flex items-center gap-2 mt-2">
                 <FaBookmark className="text-primary_green inline-block mr-1" />
                 <span className="font-semibold">
@@ -385,8 +384,7 @@ export default async function TransferDetailPage({
                 </span>
               </h2>
               <div className="text-sm text-gray-600 mb-2">
-                ${Math.round(transferDetails.newPrice * 0.22)} / €
-                {Math.round(transferDetails.newPrice * 0.21)}
+                <TransferPriceDisplay price={transferDetails.newPrice} />
               </div>
               <div className="flex items-center gap-2 mb-2">
                 <FaBookmark className="text-primary_green inline-block mr-1" />
@@ -444,6 +442,11 @@ export default async function TransferDetailPage({
           packageSlug={transferDetails.slug}
           packageType="transfer"
         />
+      </div>
+
+      {/* Reviews & Comments Section */}
+      <div className="my-12">
+        <ReviewSection packageId={transferDetails._id} packageType="transfer" />
       </div>
 
       {/* Other Packages */}

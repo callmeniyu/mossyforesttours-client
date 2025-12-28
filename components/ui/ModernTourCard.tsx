@@ -8,6 +8,7 @@ import { FaStar } from "react-icons/fa";
 import { resolveImageUrl } from "@/lib/imageUtils";
 import { formatBookedCount } from "@/lib/utils";
 import { calculateOfferPercentage } from "@/lib/utils";
+import { useCurrency } from "@/context/CurrencyContext";
 import type { KeyboardEvent, MouseEvent } from "react";
 
 type ModernTourCardProps = {
@@ -19,6 +20,8 @@ type ModernTourCardProps = {
   description: string;
   duration: string;
   bookedCount: string | number;
+  rating?: number;
+  reviewCount?: number;
   oldPrice: number;
   newPrice: number;
   type: string;
@@ -34,12 +37,15 @@ export default function ModernTourCard({
   duration,
   tags,
   bookedCount,
+  rating,
+  reviewCount,
   oldPrice,
   newPrice,
   type,
   label,
 }: ModernTourCardProps) {
   const router = useRouter();
+  const { convertToUSD, convertToEUR } = useCurrency();
 
   const truncate = (s?: string, n = 80) => {
     if (!s) return "";
@@ -124,6 +130,21 @@ export default function ModernTourCard({
             {formatBookedCount(bookedCount)} booked
           </span>
         </div>
+
+        {/* Rating badge */}
+        {rating !== undefined &&
+          reviewCount !== undefined &&
+          reviewCount > 0 && (
+            <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full shadow-md">
+              <FaStar className="text-amber-500 text-sm" />
+              <span className="text-xs font-semibold text-neutral-700">
+                {rating.toFixed(1)}
+              </span>
+              <span className="text-xs text-neutral-500">
+                ({formatBookedCount(reviewCount)})
+              </span>
+            </div>
+          )}
       </div>
 
       {/* Content Container */}
@@ -186,7 +207,7 @@ export default function ModernTourCard({
               </span>
             </div>
             <div className="text-xs text-text-light mt-0.5">
-              ${Math.round(newPrice * 0.22)} / €{Math.round(newPrice * 0.21)}
+              ${convertToUSD(newPrice)} / €{convertToEUR(newPrice)}
             </div>
           </div>
 

@@ -114,7 +114,7 @@ export default async function BlogDetailsPage({ params }: Props) {
   console.log("Rendering blog details page");
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10 font-poppins">
+    <div className="max-w-6xl mx-auto px-4 py-10 pt-24 font-poppins">
       {/* Title + Meta */}
       <div className="bg-primary_green text-white p-3 md:p-6 rounded-lg text-center space-y-3 mb-6">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug">

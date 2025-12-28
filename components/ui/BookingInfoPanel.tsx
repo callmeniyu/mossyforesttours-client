@@ -2,14 +2,9 @@
 
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
-import { IoCartOutline } from "react-icons/io5";
 import { IoBagOutline } from "react-icons/io5";
 import { useToast } from "@/context/ToastContext";
-import { useCart } from "@/context/CartContext";
-import { formatDateForServer } from "@/lib/dateUtils";
 import SessionHook from "@/hooks/SessionHook";
-import PickupLocationModal from "./PickupLocationModal";
-import { useState } from "react";
 
 type Props = {
   title: string;
@@ -36,7 +31,6 @@ type Props = {
     pickupOption: "admin" | "user";
     pickupLocations: string;
   };
-  // Validation parameters for Add to Cart
   timeSlots?: Array<{
     time: string;
     capacity: number;
@@ -74,162 +68,9 @@ export default function BookingInfoPanel({
   const router = useRouter();
   const { showToast } = useToast();
   const { user, isAuthenticated } = SessionHook();
-  const { addToCart, loading: cartLoading } = useCart();
   const total = isVehicleBooking
     ? Number(adultPrice) || 0
     : adults * adultPrice + children * childPrice;
-  const [isPickupModalOpen, setIsPickupModalOpen] = useState(false);
-
-  // Utility to strip HTML tags from any input (protect stored pickupLocation)
-  const stripHtmlTags = (html: string) => {
-    if (!html) return "";
-    try {
-      const div = document.createElement("div");
-      div.innerHTML = html;
-      return div.textContent || div.innerText || "";
-    } catch (e) {
-      return html;
-    }
-  };
-
-  const handleAddToCart = async () => {
-    console.log("BookingInfoPanel: handleAddToCart called", {
-      packageType,
-      packageId,
-      isAuthenticated,
-    });
-
-    if (!isAuthenticated || !user) {
-      showToast({
-        type: "error",
-        title: "Authentication Required",
-        message: "Please log in to add items to cart",
-      });
-      router.push("/auth");
-      return;
-    }
-
-    if (!packageId) {
-      showToast({
-        type: "error",
-        title: "Error",
-        message: "Package information is missing",
-      });
-      return;
-    }
-
-    // Validation: Check if date is selected (date should not be invalid)
-    if (!date || isNaN(date.getTime())) {
-      showToast({
-        type: "error",
-        title: "Date Required",
-        message: "Please select a date for your booking",
-      });
-      return;
-    }
-
-    // Validation: Check if time is selected
-    if (!time) {
-      showToast({
-        type: "error",
-        title: "Time Required",
-        message: "Please select a time slot for your booking",
-      });
-      return;
-    }
-
-    // Validation: Check time slot availability and requirements
-    if (timeSlots && timeSlots.length > 0) {
-      const selectedSlot = timeSlots.find((slot) => slot.time === time);
-      if (!selectedSlot) {
-        showToast({
-          type: "error",
-          title: "Invalid time slot",
-          message: "Please select a valid time slot",
-        });
-        return;
-      }
-
-      // For private tours, check if there are available units
-      if (tourType === "private" || isVehicleBooking) {
-        if (selectedSlot.capacity - selectedSlot.bookedCount < 1) {
-          showToast({
-            type: "error",
-            title: "No units available",
-            message: "No vehicle units available for this time slot",
-          });
-          return;
-        }
-      } else {
-        // For non-private tours/transfers, validate guest requirements
-        // Check minimum adults requirement (children don't count toward minimum)
-        if (adults < selectedSlot.minimumPerson) {
-          showToast({
-            type: "error",
-            title: "Minimum adults required",
-            message: `Please select at least ${
-              selectedSlot.minimumPerson
-            } adult${
-              selectedSlot.minimumPerson > 1 ? "s" : ""
-            } for this time slot. Current adults: ${adults}`,
-          });
-          return;
-        }
-
-        const totalGuests = adults + children;
-        if (totalGuests > selectedSlot.capacity - selectedSlot.bookedCount) {
-          showToast({
-            type: "error",
-            title: "Not enough capacity",
-            message:
-              "Selected time slot doesn't have enough capacity for your group",
-          });
-          return;
-        }
-      }
-    }
-
-    // Validation: For non-private bookings, ensure at least 1 adult
-    if (!isVehicleBooking && adults < 1) {
-      showToast({
-        type: "error",
-        title: "Adults Required",
-        message: "Please select at least 1 adult for your booking",
-      });
-      return;
-    }
-
-    // Show pickup location modal for both tours and transfers
-    setIsPickupModalOpen(true);
-  };
-
-  const handlePickupLocationConfirm = async (pickupLocation: string) => {
-    setIsPickupModalOpen(false);
-
-    try {
-      const cleaned = stripHtmlTags(pickupLocation || "");
-      const success = await addToCart({
-        packageId: packageId!,
-        packageType,
-        selectedDate: formatDateForServer(date), // Use timezone-safe date formatting
-        selectedTime: time,
-        adults,
-        children: children || 0,
-        pickupLocation: cleaned, // Pass cleaned pickup location
-      });
-
-      if (success) {
-        router.push("/cart");
-      }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      showToast({
-        type: "error",
-        title: "Error",
-        message: "Failed to add item to cart",
-      });
-    }
-  };
 
   return (
     <div className="border rounded-md shadow min-w-[250px] font-poppins max-h-max pb-4">
@@ -346,44 +187,19 @@ export default function BookingInfoPanel({
             <p>Proceed to Payment</p>
           </div>
         ) : (
-          // Booking details page - show Add to Cart and Continue buttons
-          <>
-            <button
-              onClick={handleAddToCart}
-              type="button"
-              disabled={disabled || cartLoading}
-              className={`${
-                disabled || cartLoading
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "cursor-pointer border border-primary_green text-primary_green hover:bg-primary_green hover:text-white"
-              } text-sm px-4 py-2 flex gap-2 justify-center items-center rounded-md font-poppins font-semibold transition-colors`}
-            >
-              <IoCartOutline className="inline mr-2 text-2xl" />
-              <p>{cartLoading ? "Adding..." : "Add to Cart"}</p>
-            </button>
-            <div
-              onClick={disabled ? undefined : onClick}
-              className={`${
-                disabled
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary_green cursor-pointer hover:bg-primary_green/90"
-              } text-white text-sm px-4 py-3 flex gap-2 justify-center items-center rounded-md font-poppins font-semibold transition-colors`}
-            >
-              <p>Continue to Payment</p>
-            </div>
-          </>
+          // Booking details page - show Continue button only
+          <div
+            onClick={disabled ? undefined : onClick}
+            className={`${
+              disabled
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-primary_green cursor-pointer hover:bg-primary_green/90"
+            } text-white text-sm px-4 py-3 flex gap-2 justify-center items-center rounded-md font-poppins font-semibold transition-colors`}
+          >
+            <p>Continue to Payment</p>
+          </div>
         )}
       </div>
-
-      {/* Pickup Location Modal (used for transfers) */}
-      <PickupLocationModal
-        isOpen={isPickupModalOpen}
-        onClose={() => setIsPickupModalOpen(false)}
-        onConfirm={handlePickupLocationConfirm}
-        packageType={packageType}
-        transferDetails={transferDetails}
-        packageTitle={title}
-      />
     </div>
   );
 }

@@ -24,6 +24,9 @@ import "react-day-picker/style.css";
 import { tourApi } from "@/lib/tourApi";
 import { TourType } from "@/lib/types";
 import { useBooking } from "@/context/BookingContext";
+import ReviewSection from "@/components/sections/ReviewSection";
+import TourPriceDisplay from "@/components/ui/TourPriceDisplay";
+import FAQSection from "@/components/sections/FAQSection";
 
 export default function TourDetailPage() {
   const params = useParams();
@@ -329,8 +332,8 @@ export default function TourDetailPage() {
         {/* Rating Badge */}
         <div className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white/95 rounded-full shadow-md">
           <IoStar className="text-amber-400" />
-          <span className="font-bold text-neutral-800">4.8</span>
-          <span className="text-neutral-500 text-sm">(120+ reviews)</span>
+          <span className="font-bold text-neutral-800">{tour.rating}</span>
+          <span className="text-neutral-500 text-sm">({tour.reviewCount})</span>
         </div>
       </div>
 
@@ -361,7 +364,7 @@ export default function TourDetailPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <IoBookmarkOutline className="text-primary text-lg font-bold" />
-                  <span>30k+ Booked</span>
+                  <span>{tour.bookedCount || 0} Booked</span>
                 </div>
               </div>
             </div>
@@ -477,15 +480,11 @@ export default function TourDetailPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-text-secondary mb-1">
-                  <span>
-                    ${Math.round(tour.newPrice * 0.22)} / €
-                    {Math.round(tour.newPrice * 0.21)} per adult
-                  </span>
+                  <TourPriceDisplay price={tour.newPrice} label="per adult" />
                 </div>
                 <div className="text-text-light text-xs mt-1">
-                  Child (3-11 years): RM {tour.childPrice} ($
-                  {Math.round(tour.childPrice * 0.22)} / €
-                  {Math.round(tour.childPrice * 0.21)})
+                  Child (3-11 years): RM {tour.childPrice} (
+                  <TourPriceDisplay price={tour.childPrice} />)
                 </div>
               </div>
 
@@ -637,7 +636,10 @@ export default function TourDetailPage() {
                       <DayPicker
                         mode="single"
                         selected={selectedDate}
-                        onSelect={setSelectedDate}
+                        onSelect={(date) => {
+                          setSelectedDate(date);
+                          setShowCalendar(false);
+                        }}
                         disabled={{ before: new Date() }}
                         modifiersClassNames={{
                           selected: "selected-day",
@@ -701,8 +703,7 @@ export default function TourDetailPage() {
                                     : "text-text-light"
                                 }`}
                               >
-                                {availableSpots} spot
-                                {availableSpots !== 1 ? "s" : ""} left
+                                Seats available
                               </div>
                             )}
                             {isDisabled && (
@@ -863,27 +864,16 @@ export default function TourDetailPage() {
         </div>
       </div>
 
-      {/* Reviews & Comments Section - Isolated Container */}
-      <div className="max-w-6xl mx-auto px-4 pb-12">
-        <div className="bg-gradient-to-br from-gray-50 to-neutral-100 rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 shadow-lg border border-neutral-200">
-          {/* Section Header */}
-          <div className="mb-6 md:mb-8">
-            <div className="flex items-center gap-2 sm:gap-3 mb-2">
-              <div className="w-1 h-6 sm:h-8 bg-primary rounded-full"></div>
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
-                Reviews & Comments
-              </h2>
-            </div>
-            <p className="text-sm sm:text-base text-text-secondary ml-4 sm:ml-7">
-              Share your experience and help others discover this tour
-            </p>
-          </div>
-
-          {/* Reviews Content Placeholder */}
-          <div className="text-center text-text-secondary py-8">
-            <p>Reviews section coming soon...</p>
-          </div>
+      {/* FAQ Section */}
+      {tour?.details?.faq && tour.details.faq.length > 0 && (
+        <div className="max-w-6xl mx-auto px-4 pb-8">
+          <FAQSection faqs={tour.details.faq} />
         </div>
+      )}
+
+      {/* Reviews & Comments Section */}
+      <div className="max-w-6xl mx-auto px-4 pb-12">
+        {tour && <ReviewSection packageId={tour._id} packageType="tour" />}
       </div>
     </div>
   );

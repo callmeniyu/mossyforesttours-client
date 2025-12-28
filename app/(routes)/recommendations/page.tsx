@@ -200,21 +200,15 @@ export default function RecommendationsPage() {
           </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             Join thousands of satisfied customers who have made unforgettable
-            memories with Oastel. Book now and experience the best Malaysia has
-            to offer!
+            memories with Cameron Highlands Tours. Book now and experience the
+            best Malaysia has to offer!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <button
               onClick={handleGoHome}
-              className="px-8 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               Back to Home
-            </button>
-            <button
-              onClick={() => router.push("/contact-us")}
-              className="px-8 py-3 bg-primary_green text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
-            >
-              Contact Us
             </button>
           </div>
         </div>

@@ -9,13 +9,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Autoplay, Pagination } from "swiper/modules";
 import { useState, useEffect } from "react";
 import { tourApi } from "@/lib/tourApi";
-import { TourType } from "@/lib/types";
+import { blogApi } from "@/lib/blogApi";
+import { TourType, BlogType } from "@/lib/types";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import ModernTourCardHome from "@/components/ui/ModernTourCardHome";
+import BlogCard from "@/components/ui/BlogCard";
+import HomeTourPriceDisplay from "@/components/ui/HomeTourPriceDisplay";
 
 // Custom styles for the carousel
 const carouselStyles = `
@@ -68,7 +71,9 @@ const getLabelStyles = (label: string) => {
 
 export default function Home() {
   const [tours, setTours] = useState<TourType[]>([]);
+  const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isBlogsLoading, setIsBlogsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -86,6 +91,42 @@ export default function Home() {
     };
 
     fetchTours();
+  }, []);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setIsBlogsLoading(true);
+        const response = await blogApi.getBlogs({ limit: 3 });
+        if (response.success) {
+          setBlogs(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setIsBlogsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setIsBlogsLoading(true);
+        const response = await blogApi.getBlogs({ limit: 3 });
+        if (response.success) {
+          setBlogs(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setIsBlogsLoading(false);
+      }
+    };
+
+    fetchBlogs();
   }, []);
   return (
     <div className="min-h-screen bg-neutral-50 text-text-primary">
@@ -150,13 +191,13 @@ export default function Home() {
                 {tours.slice(0, 4).map((tour, index) => (
                   <SwiperSlide key={tour._id} className="w-72 max-w-sm">
                     <Link href={`/tours/${tour.slug}`} className="block h-full">
-                      <div className="h-full rounded-3xl overflow-hidden bg-white border border-neutral-200 shadow-soft hover:shadow-strong transition-all duration-300">
-                        <div className="relative h-48">
+                      <div className="h-80 min-w-max rounded-3xl overflow-hidden bg-white border border-neutral-200 shadow-soft hover:shadow-strong transition-all duration-300">
+                        <div className="relative h-full">
                           <Image
                             src={tour.image}
                             alt={tour.title}
                             fill
-                            className="object-cover"
+                            className="object-cover h-full"
                             priority={index === 0}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
@@ -172,80 +213,32 @@ export default function Home() {
                           )}
 
                           <div className="absolute bottom-4 left-4 right-4 text-white">
-                            <h3 className="text-lg font-semibold line-clamp-2 mb-2">
+                            <h3 className="text-xl font-bold mb-3">
                               {tour.title}
                             </h3>
-                            <div className="flex items-center gap-3 text-sm text-white/80 mb-2">
-                              <div className="flex items-center gap-1">
-                                <FiClock className="w-4 h-4" />
-                                <span>{tour.duration}</span>
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-2xl font-bold">
+                                  RM {tour.newPrice}
+                                </span>
+                                {tour.oldPrice &&
+                                  tour.oldPrice > tour.newPrice && (
+                                    <>
+                                      <span className="text-sm text-white/70 line-through">
+                                        RM {tour.oldPrice}
+                                      </span>
+                                      <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full font-semibold">
+                                        {Math.round(
+                                          (1 - tour.newPrice / tour.oldPrice) *
+                                            100
+                                        )}
+                                        % OFF
+                                      </span>
+                                    </>
+                                  )}
                               </div>
-                              <span className="inline-block w-1 h-1 rounded-full bg-white/70" />
-                              <div className="flex items-center gap-1">
-                                <IoStar className="w-4 h-4 text-yellow-400" />
-                                <span>4.8</span>
-                              </div>
-                              <span className="inline-block w-1 h-1 rounded-full bg-white/70" />
-                              <span>
-                                {typeof tour.bookedCount === "number"
-                                  ? tour.bookedCount
-                                  : 0}
-                                + booked
-                              </span>
+                              <HomeTourPriceDisplay price={tour.newPrice} />
                             </div>
-                            <div className="flex items-center justify-between">
-                              <div className="space-y-0.5">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-lg font-bold">
-                                    RM {tour.newPrice}
-                                  </span>
-                                  {tour.oldPrice &&
-                                    tour.oldPrice > tour.newPrice && (
-                                      <>
-                                        <span className="text-sm text-white/70 line-through">
-                                          RM {tour.oldPrice}
-                                        </span>
-                                        <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full font-semibold">
-                                          {Math.round(
-                                            (1 -
-                                              tour.newPrice / tour.oldPrice) *
-                                              100
-                                          )}
-                                          % OFF
-                                        </span>
-                                      </>
-                                    )}
-                                </div>
-                                <div className="text-xs text-white/70">
-                                  ${Math.round(tour.newPrice * 0.22)} / €
-                                  {Math.round(tour.newPrice * 0.21)}
-                                </div>
-                                <div className="flex items-center gap-2 text-xs text-white/70">
-                                  <span>
-                                    ${(tour.newPrice * 0.22).toFixed(0)}
-                                  </span>
-                                  <span>•</span>
-                                  <span>
-                                    €{(tour.newPrice * 0.21).toFixed(0)}
-                                  </span>
-                                </div>
-                              </div>
-                              <span className="text-xs text-white/80">
-                                (120+ reviews)
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-4">
-                          <p className="text-sm text-text-secondary line-clamp-2 mb-3">
-                            {tour.description}
-                          </p>
-                          <div className="flex items-center justify-between text-xs text-text-secondary">
-                            <span className="px-2 py-1 bg-neutral-100 rounded-full">
-                              {tour.type}
-                            </span>
-                            <span>Book now</span>
                           </div>
                         </div>
                       </div>
@@ -292,10 +285,11 @@ export default function Home() {
                 duration={tour.duration}
                 price={tour.newPrice}
                 originalPrice={tour.oldPrice}
-                rating={4.8}
-                reviewCount={120}
+                rating={tour.rating || 4.8}
+                reviewCount={tour.reviewCount || 220}
                 label={tour.label || undefined}
                 category={tour.type}
+                bookedCount={tour.bookedCount}
               />
             ))}
           </div>
@@ -325,6 +319,38 @@ export default function Home() {
             </a>
           </div>
         </div>
+      </section>
+
+      {/* Blog Section */}
+      <section className="max-w-6xl mx-auto px-4 pb-16">
+        <div className="flex flex-col gap-1 mb-6">
+          <h2 className="text-2xl font-bold">Stories from the Highlands</h2>
+          <p className="text-text-secondary text-sm">
+            Discover travel tips, local insights, and highland inspiration
+          </p>
+        </div>
+
+        {isBlogsLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="animate-pulse">
+                <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        ) : blogs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {blogs.map((blog) => (
+              <BlogCard key={blog._id} {...blog} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-text-secondary">
+            <p>No blog posts available yet. Check back soon!</p>
+          </div>
+        )}
       </section>
     </div>
   );

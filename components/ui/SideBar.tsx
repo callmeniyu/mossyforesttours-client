@@ -93,7 +93,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 {[
                   { href: "/", label: "Home" },
                   { href: "/blogs", label: "Stories" },
-                  { href: "/faqs", label: "FAQ" },
                 ].map((link) => (
                   <Link
                     key={link.href}
@@ -127,20 +126,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   expandedSections.support ? "max-h-40 mt-2" : "max-h-0"
                 }`}
               >
-                <Link
-                  href="/contact-us"
-                  onClick={onClose}
-                  className="block px-3 py-2 text-desc_gray rounded-lg hover:bg-neutral-100 hover:text-primary transition-colors"
-                >
-                  Contact Us
-                </Link>
-                <Link
-                  href="/contact-us#feedback"
-                  onClick={onClose}
-                  className="block px-3 py-2 text-desc_gray rounded-lg hover:bg-neutral-100 hover:text-primary transition-colors"
-                >
-                  Feedback
-                </Link>
                 <Link
                   href="/faqs"
                   onClick={onClose}

@@ -50,6 +50,8 @@ export type TourType = {
     duration: string
     period: "Half-Day" | "Full-Day"
     bookedCount: string | number
+    rating?: number
+    reviewCount?: number
     oldPrice: number
     newPrice: number
     childPrice: number
@@ -90,6 +92,8 @@ export interface TransferType {
     packageType: "transfer"
     duration: string
     bookedCount: number | string
+    rating?: number
+    reviewCount?: number
     oldPrice: number
     newPrice: number
     childPrice: number

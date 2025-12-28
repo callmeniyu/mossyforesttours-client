@@ -14,16 +14,18 @@ import {
 import { useBooking } from "@/context/BookingContext";
 import { format } from "date-fns";
 import { useToast } from "@/context/ToastContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function UserInfoPage() {
   const router = useRouter();
   const params = useSearchParams();
   const { booking } = useBooking();
   const { showToast } = useToast();
-  
+  const { convertToUSD, convertToEUR } = useCurrency();
+
   const [couponApplied, setCouponApplied] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  
+
   // Form State
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,23 +37,24 @@ export default function UserInfoPage() {
   useEffect(() => {
     if (!booking) {
       // If no booking data, redirect back to tours or home
-      // router.push("/tours"); 
+      // router.push("/tours");
       // Commented out to prevent infinite redirect loop during development if context is lost
       // In production, you might want to redirect
     }
 
     if (booking?.pickupLocations) {
-      const locations = booking.pickupLocations.split(",").map(s => s.trim()).filter(Boolean);
+      const locations = booking.pickupLocations
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
       setPickupOptions(locations);
-      if (locations.length > 0) {
-        setPickupLocation(locations[0]);
-      }
+      // Don't set default pickup location - let user enter it
     }
   }, [booking, router]);
 
   if (!booking) {
     return (
-       <div className="min-h-screen bg-neutral-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center px-4">
         <div className="text-center">
           <p className="text-text-secondary mb-4">No booking details found.</p>
           <Link
@@ -89,7 +92,7 @@ export default function UserInfoPage() {
     }
 
     if (!pickupLocation && pickupOptions.length > 0) {
-       showToast({
+      showToast({
         type: "error",
         title: "Missing Pickup Location",
         message: "Please select a pickup location.",
@@ -101,7 +104,7 @@ export default function UserInfoPage() {
     // We need to match what PaymentController expects
     const bookingData = {
       ...booking,
-      subtotal: priceNum,// The base price before discount
+      subtotal: priceNum, // The base price before discount
       total: finalPrice, // Ensure final price is set as total
       contactInfo: {
         name: fullName,
@@ -113,13 +116,17 @@ export default function UserInfoPage() {
     };
 
     const encodedBookingData = encodeURIComponent(JSON.stringify(bookingData));
-    
+
     // Pass final amount (after discount)
-    router.push(`/payment?bookingData=${encodedBookingData}&amount=${finalPrice}`);
+    router.push(
+      `/payment?bookingData=${encodedBookingData}&amount=${finalPrice}`
+    );
   };
 
   // Format Date for Display
-  const displayDate = booking.date ? format(new Date(booking.date), "d MMM yyyy") : "";
+  const displayDate = booking.date
+    ? format(new Date(booking.date), "d MMM yyyy")
+    : "";
 
   return (
     <div className="min-h-screen bg-neutral-50 pt-24 pb-16 px-4">
@@ -221,26 +228,20 @@ export default function UserInfoPage() {
                 Pickup location
                 <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-neutral-200 bg-white ">
                   <FiMapPin className="text-secondary" />
-                  {pickupOptions.length > 0 ? (
-                    <select 
-                      value={pickupLocation}
-                      onChange={(e) => setPickupLocation(e.target.value)}
-                      className="w-full bg-transparent outline-none focus:ring-0 focus:outline-none focus:shadow-none text-text-primary"
-                    >
-                      {pickupOptions.map((opt, i) => (
-                        <option key={i} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                        type="text"
-                        value={pickupLocation}
-                        onChange={(e) => setPickupLocation(e.target.value)}
-                        placeholder="Enter hotel name or location"
-                        className="w-full bg-transparent outline-none focus:ring-0 focus:outline-none focus:shadow-none text-text-primary"
-                    />
-                  )}
+                  <input
+                    type="text"
+                    value={pickupLocation}
+                    onChange={(e) => setPickupLocation(e.target.value)}
+                    placeholder="Enter your hotel name or pickup location"
+                    className="w-full bg-transparent outline-none focus:ring-0 focus:outline-none focus:shadow-none text-text-primary"
+                  />
                 </div>
+                {pickupOptions.length > 0 && (
+                  <div className="text-xs text-gray-600 mt-1">
+                    <span className="font-medium">Available locations:</span>{" "}
+                    {pickupOptions.join(", ")}
+                  </div>
+                )}
               </label>
             </div>
 
@@ -383,8 +384,7 @@ export default function UserInfoPage() {
                     RM {finalPrice.toFixed(0)}
                   </div>
                   <div className="text-xs text-text-secondary">
-                    ${Math.round(finalPrice * 0.22)} / €
-                    {Math.round(finalPrice * 0.21)}
+                    ${convertToUSD(finalPrice)} / €{convertToEUR(finalPrice)}
                   </div>
                 </div>
               </div>

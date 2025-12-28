@@ -5,109 +5,62 @@ import { FiChevronDown, FiChevronUp, FiSearch, FiX } from "react-icons/fi";
 
 // FAQ Data
 const allFaqs: FAQType[] = [
-  // Stay FAQ
+  // Tours FAQ
   {
     id: 1,
-    question: "What types of accommodations does Oastel offer?",
+    question: "What types of tours does Cameron Highlands Tours offer?",
     answer:
-      "Oastel offers a range of budget-friendly stays designed with a co-living concept. It is ideal for backpackers and travelers looking for affordable, comfortable, and social accommodation.",
-    category: "Stay",
+      "Cameron Highlands Tours offers carefully curated, small-group day tours across the Cameron Highlands. We specialize in tea plantation visits, strawberry farm tours, nature trails, and cultural experiences designed for travelers who value calm, well-paced itineraries.",
+    category: "Tours",
   },
   {
     id: 2,
-    question: "Are the stays suitable for families with children?",
+    question: "Are the tours suitable for families with children?",
     answer:
-      "No. Oastel is designed for backpackers, couples, and solo travelers, and is not suitable for children.",
-    category: "Stay",
+      "Yes. Our tours are family-friendly and suitable for all ages. We maintain a relaxed pace with plenty of photo stops and breaks. Children under 12 typically receive discounted rates.",
+    category: "Tours",
   },
   {
     id: 3,
-    question: "Can I choose my preferred room type while booking?",
+    question: "What is included in the tour package?",
     answer:
-      "Yes. We offer two room types: rooms with a private bathroom and rooms with a shared bathroom. You can select your preferred option when booking.",
-    category: "Stay",
+      "All tours include hotel pick-up and drop-off, air-conditioned transportation, an experienced English-speaking guide, and entrance fees to attractions. Meals are not included unless specifically stated in the tour description.",
+    category: "Tours",
   },
   {
     id: 4,
-    question: "Is breakfast included with the stay?",
+    question: "How many people are in a typical tour group?",
     answer:
-      "No, breakfast is not included. However, there are many breakfast spots within 500 meters of Oastel.",
-    category: "Stay",
+      "We keep our groups small, typically between 4-8 people, to ensure a personalized experience. Private tours are also available for those who prefer exclusivity.",
+    category: "Tours",
   },
   {
     id: 5,
-    question: "Are pets allowed at Oastel?",
-    answer: "No, pets are not allowed.",
-    category: "Stay",
+    question: "What should I bring on a tour?",
+    answer:
+      "We recommend bringing comfortable walking shoes, a light jacket (temperatures can be cool), sunscreen, a hat, and your camera. An umbrella or raincoat is also advisable as weather can be unpredictable.",
+    category: "Tours",
   },
   {
     id: 6,
-    question: "What are the check-in and check-out times?",
-    answer: "Check-in is from 2:00 PM and check-out is by 12:00 PM.",
-    category: "Stay",
+    question: "What are the tour pick-up and drop-off times?",
+    answer:
+      "Most tours begin between 8:00-9:00 AM and conclude by 5:00-6:00 PM. Exact times are confirmed after booking and depend on your accommodation location.",
+    category: "Tours",
   },
   {
     id: 7,
-    question:
-      "Can I store my luggage at Oastel after check-out while waiting for my bus?",
+    question: "Can I customize my tour itinerary?",
     answer:
-      "Yes. You can leave your luggage at the lobby and relax in our common space until your bus departure.",
-    category: "Stay",
+      "Yes. For private tours, we're happy to adjust the itinerary based on your interests. Please contact us at hello@cameronhighlandstours.com to discuss your preferences.",
+    category: "Tours",
   },
   {
     id: 8,
-    question: "How do I get from the bus terminal to Oastel?",
+    question: "What is your cancellation policy?",
     answer:
-      "Oastel is about 500–800 meters from the bus terminal, which is within walking distance. Taxis are also available if you prefer not to walk.",
-    category: "Stay",
-  },
-  // Transfers FAQ
-  {
-    id: 9,
-    question: "What transportation options are available?",
-    answer: "Oastel offers both private transfers and daily shuttle services.",
-    category: "Transfers",
-  },
-  {
-    id: 10,
-    question: "How do I book a shuttle transfer?",
-    answer:
-      "You can book directly through our website by selecting your travel date, route, and number of passengers.",
-    category: "Transfers",
-  },
-  {
-    id: 11,
-    question: "Can I request a custom pick-up or drop-off point?",
-    answer:
-      "Pick-up and drop-off points are listed in each package description. Please check the details when booking.",
-    category: "Transfers",
-  },
-  {
-    id: 12,
-    question: "Do your vehicles have air conditioning?",
-    answer: "Yes, all our vehicles are air-conditioned.",
-    category: "Transfers",
-  },
-  {
-    id: 13,
-    question: "What happens if I miss my van departure?",
-    answer:
-      "If you are late and miss your van, your booking will be canceled. A new booking can be made depending on availability, but refunds are not provided.",
-    category: "Transfers",
-  },
-  {
-    id: 14,
-    question: "Can I bring luggage on the land transfer?",
-    answer:
-      "Yes. Each passenger may bring up to 20 kg of checked luggage plus one 7 kg carry-on bag on both shuttle vans and private transfers.",
-    category: "Transfers",
-  },
-  {
-    id: 15,
-    question: "Are child seats available?",
-    answer:
-      "No, child seats are not available. Parents must seat children on their lap during the transfer.",
-    category: "Transfers",
+      "Cancellations made 48 hours or more before the tour start time receive a full refund. Cancellations within 48 hours are non-refundable, though we may offer rescheduling options based on availability.",
+    category: "Tours",
   },
 ];
 
@@ -152,14 +105,14 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-poppins">
+    <div className="min-h-screen bg-white font-poppins pt-16">
       {/* Hero Section */}
-      <div className="relative h-64 bg-primary_green flex items-center justify-center">
+      <div className="relative h-64 bg-primary flex items-center justify-center">
         <div className="absolute inset-0 bg-black/30 z-10"></div>
         <div className="relative z-20 text-center px-4">
           <h1 className="text-4xl font-bold text-white mb-4">FAQs</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Find answers to common questions about Oastel
+            Find answers to common questions about Cameron Highlands Tours
           </p>
         </div>
       </div>

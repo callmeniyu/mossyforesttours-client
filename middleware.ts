@@ -18,7 +18,6 @@ const ALLOWED_PREFIXES = [
   "/payment",
   "/login",
   "/admin",
-  "/contact-us",
   "/privacy-policy",
   "/terms",
   "/blog",
