@@ -26,10 +26,7 @@ export type FAQType = {
 
 export type TourDetailsType = {
     about: string
-    itinerary: Array<{
-        time: string
-        activity: string
-    }>
+    itinerary: string
     pickupLocations: string[]
     pickupGuidelines?: string
     notes: string[]

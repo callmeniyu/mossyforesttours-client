@@ -24,10 +24,10 @@ const iconMap = {
 };
 
 const bgMap = {
-  success: "bg-accent/10 border-accent/40 shadow-soft",
-  info: "bg-blue-50/90 border-blue-500 shadow-blue-200/80",
-  warning: "bg-yellow-50/90 border-yellow-500 shadow-yellow-200/80",
-  error: "bg-red-50/90 border-red-500 shadow-red-200/80",
+  success: "bg-accent border-accent/40 shadow-soft",
+  info: "bg-blue-50 border-blue-500 shadow-blue-200/80",
+  warning: "bg-yellow-50 border-yellow-500 shadow-yellow-200/80",
+  error: "bg-red-50 border-red-500 shadow-red-200/80",
 };
 
 export default function Toast({ type, title, message, onClose }: ToastProps) {

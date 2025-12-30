@@ -325,13 +325,17 @@ export default function UserInfoPage() {
                       <div className="flex items-center gap-2 mb-2">
                         <FiTag className="text-purple-600" />
                         <span className="text-purple-800 font-bold text-base">
-                          {availableCoupon}% OFF Coupon Available!
+                          Limited-Time Voucher Offer
                         </span>
                       </div>
+                      <p className="text-sm text-purple-700 mb-1">
+                        Enjoy {availableCoupon}% OFF your booking.
+                      </p>
                       <p className="text-sm text-purple-700">
-                        Save RM{" "}
-                        {((priceNum * availableCoupon) / 100).toFixed(0)} on
-                        your purchase
+                        Save up to RM{" "}
+                        {((priceNum * availableCoupon) / 100).toFixed(0)} today.
+                        {availableCoupon === 5 &&
+                          " Get 10% OFF on bookings over RM200!"}
                       </p>
                     </div>
                     <button
@@ -348,12 +352,12 @@ export default function UserInfoPage() {
                 <div className="flex items-center gap-2 mb-2">
                   <FiTag className="text-blue-600" />
                   <span className="text-blue-800 font-semibold text-sm">
-                    💡 Coupon Info
+                    Unlock Extra Savings 🎉
                   </span>
                 </div>
                 <div className="text-xs text-blue-700 space-y-1">
-                  <div>• Spend RM 100+: Get 5% discount</div>
-                  <div>• Spend RM 200+: Get 10% discount</div>
+                  <div>• 5% OFF on RM100+</div>
+                  <div>• 10% OFF on RM200+</div>
                 </div>
               </div>
             )}

@@ -12,8 +12,10 @@ import {
   FiCheck,
   FiInfo,
   FiCalendar,
+  FiUser,
 } from "react-icons/fi";
 import { IoBookmarkOutline } from "react-icons/io5";
+import { HiOutlineUserGroup } from "react-icons/hi2";
 
 import { IoStar, IoLocationSharp, IoTimeOutline } from "react-icons/io5";
 import { MdOutlineDirectionsCar } from "react-icons/md";
@@ -211,8 +213,10 @@ export default function TourDetailPage() {
       return;
     }
 
-    // Calculate total price
-    const totalPrice = adults * tour.newPrice + children * tour.childPrice;
+    // Calculate total price with convenience fee
+    const subtotalPrice = adults * tour.newPrice + children * tour.childPrice;
+    const convenienceFee = subtotalPrice * 0.03; // 3% bank convenience fee
+    const totalPrice = subtotalPrice + convenienceFee;
 
     // Fix date handling to prevent offset issues
     const bookingDate = new Date(selectedDate);
@@ -287,7 +291,9 @@ export default function TourDetailPage() {
       ? Math.round((1 - tour.newPrice / tour.oldPrice) * 100)
       : 0;
 
-  const totalPrice = adults * tour.newPrice + children * tour.childPrice;
+  const subtotalPrice = adults * tour.newPrice + children * tour.childPrice;
+  const convenienceFee = subtotalPrice * 0.03; // 3% bank convenience fee
+  const totalPrice = subtotalPrice + convenienceFee;
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -405,22 +411,8 @@ export default function TourDetailPage() {
                 <IoTimeOutline className="text-primary text-lg sm:text-xl" />
                 Itinerary
               </h2>
-              <div className="space-y-3 sm:space-y-4">
-                {tour.details.itinerary?.map((item: any, index: number) => (
-                  <div key={index} className="flex gap-3 sm:gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 min-w-[10px] min-h-[10px] sm:min-w-[12px] sm:min-h-[12px] rounded-full bg-primary flex-shrink-0" />
-                      {index < (tour.details.itinerary?.length || 0) - 1 && (
-                        <div className="w-0.5 h-full bg-primary/20 mt-1" />
-                      )}
-                    </div>
-                    <div className="pb-3 sm:pb-4 flex-1 min-w-0">
-                      <p className="text-sm sm:text-base text-text-primary font-medium">
-                        {item.activity}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="text-sm sm:text-base text-text-secondary leading-relaxed whitespace-pre-line">
+                {tour.details.itinerary}
               </div>
             </div>
 
@@ -750,12 +742,13 @@ export default function TourDetailPage() {
               )}
 
               {/* Guests */}
-              <div className="mb-4 sm:mb-6">
+              <div className="mb-4 sm:mb-6 gap">
                 <label className="block text-sm font-semibold text-text-primary mb-3">
                   Guests
                 </label>
                 <div className="flex flex-col gap-3">
-                  <label className="block text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                  <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                    <FiUser className="text-primary text-base" />
                     Adults
                   </label>
                   <div className="flex items-center gap-2 sm:gap-3">
@@ -782,7 +775,8 @@ export default function TourDetailPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                  <label className="mt-4 flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                    <HiOutlineUserGroup className="text-primary text-lg" />
                     Children (3-11 years)
                   </label>
                   <div className="flex items-center gap-2 sm:gap-3">
@@ -806,14 +800,32 @@ export default function TourDetailPage() {
               </div>
 
               {/* Total */}
-              <div className="flex items-center justify-between py-3 sm:py-4 border-t border-neutral-100 mb-3 sm:mb-4">
-                <span className="text-sm sm:text-base text-text-secondary font-medium">
-                  Total ({adults + children} guest
-                  {adults + children !== 1 ? "s" : ""})
-                </span>
-                <span className="text-xl sm:text-2xl font-bold text-primary">
-                  RM {totalPrice}
-                </span>
+              <div className="border-t border-neutral-100 pt-3 sm:pt-4 mb-3 sm:mb-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-text-secondary">
+                    Subtotal ({adults + children} guest
+                    {adults + children !== 1 ? "s" : ""})
+                  </span>
+                  <span className="text-text-primary font-medium">
+                    RM {subtotalPrice.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-text-secondary">
+                    Bank Convenience Fee (3%)
+                  </span>
+                  <span className="text-text-primary font-medium">
+                    RM {convenienceFee.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-neutral-100">
+                  <span className="text-sm sm:text-base text-text-secondary font-semibold">
+                    Total
+                  </span>
+                  <span className="text-xl sm:text-2xl font-bold text-primary">
+                    RM {totalPrice.toFixed(2)}
+                  </span>
+                </div>
               </div>
 
               {/* Validation Error Display */}

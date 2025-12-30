@@ -1,16 +1,15 @@
 // app/auth/page.tsx
-"use client"
-import { useState } from "react"
-import AuthForm from "@/components/ui/AuthForm"
-import Image from "next/image"
+"use client";
+import { useState } from "react";
+import AuthForm from "@/components/ui/AuthForm";
+import Image from "next/image";
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="flex items-center justify-center px-4 py-10 pt-24 sm:px-6 lg:px-8 bg-gray-50">
       <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2 font-poppins">
-        
         {/* Left Image Section */}
         <div className="hidden md:block">
           <Image
@@ -42,5 +41,5 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
