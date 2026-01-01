@@ -42,7 +42,7 @@ export default function TourDetailPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedTime, setSelectedTime] = useState("");
-  const [adults, setAdults] = useState(2);
+  const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const calendarRef = useRef<HTMLDivElement>(null);
@@ -110,6 +110,16 @@ export default function TourDetailPage() {
         if (data.success) {
           const slots = Array.isArray(data.data) ? data.data : [];
           setTimeSlots(slots);
+
+          // Auto-select first available slot
+          if (slots.length > 0) {
+            const firstAvailableSlot = slots.find(
+              (slot: any) => slot.isAvailable
+            );
+            if (firstAvailableSlot) {
+              setSelectedTime(firstAvailableSlot.time);
+            }
+          }
 
           // Log slot information for debugging
           console.log(`📅 Loaded ${slots.length} time slots for ${dateString}`);
@@ -442,17 +452,9 @@ export default function TourDetailPage() {
                 <BsExclamationCircle className="text-amber-600 text-lg sm:text-xl" />
                 Important Notes
               </h2>
-              <ul className="space-y-2">
-                {tour.details.notes?.map((note: string, index: number) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-2 sm:gap-3 text-sm sm:text-base text-amber-900"
-                  >
-                    <span className="text-amber-600 mt-0.5 sm:mt-1">•</span>
-                    <span className="flex-1">{note}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="text-sm sm:text-base text-amber-900 leading-relaxed whitespace-pre-line">
+                {tour.details.notes}
+              </div>
             </div>
           </div>
 
@@ -746,12 +748,12 @@ export default function TourDetailPage() {
                 <label className="block text-sm font-semibold text-text-primary mb-3">
                   Guests
                 </label>
-                <div className="flex flex-col gap-3">
+                <div className="flex justify-between gap-3">
                   <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
                     <FiUser className="text-primary text-base" />
                     Adults
                   </label>
-                  <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => setAdults(Math.max(1, adults - 1))}
                       className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
@@ -774,12 +776,15 @@ export default function TourDetailPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="mt-4 flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
-                    <HiOutlineUserGroup className="text-primary text-lg" />
-                    Children (3-11 years)
+                <div className="flex justify-between">
+                  <label className="mt-4 items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                    <div className="flex gap-2">
+                      <HiOutlineUserGroup className="text-primary text-lg" />
+                      Children
+                    </div>
+                    <p>(3-11 years)</p>
                   </label>
-                  <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => setChildren(Math.max(0, children - 1))}
                       className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
@@ -863,12 +868,12 @@ export default function TourDetailPage() {
 
               {/* Contact Info */}
               <div className="mt-3 sm:mt-4 text-center text-xs sm:text-sm text-text-light">
-                Questions? Call us at{" "}
+                Questions? Email us at{""}
                 <a
-                  href="tel:+60123456789"
-                  className="text-primary font-medium hover:underline"
+                  href="mailto:cameronhighlandstours.com@gmail.com"
+                  className="text-primary font-medium hover:underline block"
                 >
-                  +60 12-345 6789
+                  cameronhighlandstours.com@gmail.com
                 </a>
               </div>
             </div>

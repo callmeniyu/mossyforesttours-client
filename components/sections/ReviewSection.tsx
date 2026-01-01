@@ -264,7 +264,7 @@ export default function ReviewSection({
         <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-blue-800">
             Please{" "}
-            <a href="/auth/signin" className="underline font-semibold">
+            <a href="/auth" className="underline font-semibold">
               login
             </a>{" "}
             to write a review.

@@ -127,7 +127,7 @@ export default function PaymentSuccessBookingFailedPage() {
                 href="mailto:support@oastel.com"
                 className="text-primary_green hover:underline"
               >
-                support@oastel.com
+                cameronhighlandstours.com@gmail.com
               </a>
             </p>
           </div>

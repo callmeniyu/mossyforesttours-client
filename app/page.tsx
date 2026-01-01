@@ -144,8 +144,8 @@ export default function Home() {
               Quietly elevated journeys across the Highlands.
             </h1>
             <p className="text-text-secondary text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto md:mx-0">
-              Four curated tours, balanced pacing, and tasteful stays—designed
-              for travelers who value calm, thoughtful details.
+              Curated tours, balanced pacing, and tasteful stays—designed for
+              travelers who value calm, thoughtful details.
             </p>
             <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-text-secondary justify-center md:justify-start">
               {[
@@ -297,8 +297,8 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-6xl mx-auto px-4 pb-16">
-        <div className="rounded-3xl border border-neutral-200 bg-white shadow-soft p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <section className="max-w-6xl mx-auto px-3 pb-16">
+        <div className="rounded-3xl border border-neutral-200 bg-white shadow-soft py-6 px-4 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-text-light mb-2">
               Need a hand?
@@ -307,15 +307,15 @@ export default function Home() {
               We curate calm, well-paced itineraries.
             </h3>
             <p className="text-text-secondary text-sm">
-              Call or email—real humans will help you pick.
+              Do email-real humans will help you pick.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-sm font-semibold">
             <a
-              href="mailto:hello@cameronhighlandstours.com"
+              href="mailto:cameronhighlandstours.com@gmail.com"
               className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary-dark transition-colors"
             >
-              ✉️ hello@cameronhighlandstours.com
+              ✉️ cameronhighlandstours.com@gmail.com
             </a>
           </div>
         </div>

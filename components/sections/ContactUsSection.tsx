@@ -31,23 +31,14 @@ export default function ContactInfo() {
             <p className="text-sm text-desc_gray mt-1">@oastelvibe</p>
           </Link>
 
-          <Link
-            href="http://wa.me/60196592141"
-            className="flex flex-col items-center text-center"
-          >
-            <div className="bg-primary_green text-white p-3 md:p-4 rounded-full text-2xl">
-              <FaWhatsapp className="text-2xl md:text-4xl" />
-            </div>
-            <h4 className="mt-3 font-semibold text-title_black">Whatsapp</h4>
-            <p className="text-sm text-desc_gray mt-1">+60 19-659 2141</p>
-          </Link>
-
           <div className="flex flex-col items-center text-center">
             <div className="bg-primary_green text-white p-3 md:p-4 rounded-full text-2xl">
               <SiGmail className="text-2xl md:text-4xl" />
             </div>
             <h4 className="mt-3 font-semibold text-title_black">Gmail</h4>
-            <p className="text-sm text-desc_gray mt-1">hello@oastel.com</p>
+            <p className="text-sm text-desc_gray mt-1">
+              cameronhighlandstours.com@gmail.com
+            </p>
           </div>
         </div>
       </div>

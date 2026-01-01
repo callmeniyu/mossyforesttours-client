@@ -49,18 +49,12 @@ export default function Footer() {
         <div>© 2025 Cameron Highlands Tours. All rights reserved.</div>
         <div className="flex items-center gap-3 text-sm">
           <a
-            href="mailto:hello@cameronhighlandstours.com"
+            href="mailto:cameronhighlandstours.com@gmail.com"
             className="hover:text-primary transition-colors"
           >
-            hello@cameronhighlandstours.com
+            cameronhighlandstours.com@gmail.com
           </a>
           <span className="hidden md:inline text-neutral-300">|</span>
-          <a
-            href="tel:+60123456789"
-            className="hover:text-primary transition-colors"
-          >
-            +60 12-345 6789
-          </a>
         </div>
       </div>
     </footer>

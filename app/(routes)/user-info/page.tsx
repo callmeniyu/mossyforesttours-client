@@ -162,7 +162,7 @@ export default function UserInfoPage() {
         }
       `}</style>
       <div className="max-w-5xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
-        <div className="space-y-4">
+        <div className="space-y-4 order-2 lg:order-1">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
             <Link href="/tours" className="hover:text-primary">
               Home
@@ -255,9 +255,19 @@ export default function UserInfoPage() {
               </button>
             </div>
           </div>
+
+          {/* Why we ask these section - Mobile only */}
+          <div className="bg-white border border-neutral-200 shadow-soft rounded-2xl p-5 space-y-3 text-sm text-text-secondary block lg:hidden">
+            <p className="text-text-primary font-semibold">Why we ask these</p>
+            <ul className="space-y-2 list-disc list-inside">
+              <li>Pickup coordination and emergency contact</li>
+              <li>Instant confirmation to your email</li>
+              <li>Guide identifies you</li>
+            </ul>
+          </div>
         </div>
 
-        <aside className="space-y-4">
+        <aside className="space-y-4 order-1 lg:order-2">
           <div className="bg-white border border-neutral-200 shadow-soft rounded-2xl p-6 space-y-4">
             <p className="text-xs uppercase tracking-[0.2em] text-text-light">
               Summary
@@ -395,7 +405,7 @@ export default function UserInfoPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-neutral-200 shadow-soft rounded-2xl p-5 space-y-3 text-sm text-text-secondary">
+          <div className="bg-white border border-neutral-200 shadow-soft rounded-2xl p-5 space-y-3 text-sm text-text-secondary hidden lg:block">
             <p className="text-text-primary font-semibold">Why we ask these</p>
             <ul className="space-y-2 list-disc list-inside">
               <li>Pickup coordination and emergency contact</li>

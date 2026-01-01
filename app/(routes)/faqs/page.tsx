@@ -52,7 +52,7 @@ const allFaqs: FAQType[] = [
     id: 7,
     question: "Can I customize my tour itinerary?",
     answer:
-      "Yes. For private tours, we're happy to adjust the itinerary based on your interests. Please contact us at hello@cameronhighlandstours.com to discuss your preferences.",
+      "Yes. For private tours, we're happy to adjust the itinerary based on your interests. Please contact us at cameronhighlandstours.com@gmail.com to discuss your preferences.",
     category: "Tours",
   },
   {

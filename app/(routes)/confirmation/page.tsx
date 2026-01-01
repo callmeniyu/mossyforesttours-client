@@ -127,8 +127,7 @@ export default function ConfirmationPage() {
               <div className="bg-neutral-50 border border-dashed border-neutral-200 rounded-2xl p-4 space-y-2 text-sm text-text-secondary">
                 <p className="text-text-primary font-semibold">Need help?</p>
                 <ul className="space-y-1">
-                  <li>Email: hello@cameronhighlands.tours</li>
-                  <li>WhatsApp: +60 12-345 6789</li>
+                  <li>Email: cameronhighlandstours.com@gmail.com</li>
                   <li>Response time: within the hour, 9am-9pm</li>
                 </ul>
               </div>
