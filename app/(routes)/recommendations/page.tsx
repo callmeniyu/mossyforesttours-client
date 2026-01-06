@@ -200,8 +200,8 @@ export default function RecommendationsPage() {
           </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             Join thousands of satisfied customers who have made unforgettable
-            memories with Cameron Highlands Tours. Book now and experience the
-            best Malaysia has to offer!
+            memories with Mossy Forest Tours. Book now and experience the best
+            Malaysia has to offer!
           </p>
           <div className="flex justify-center">
             <button

@@ -53,7 +53,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             href="/"
             className="text-xl font-bold text-primary font-poppins hover:text-primary-dark transition-colors"
           >
-            Cameron Highlands Tours
+            Mossy Forest Tours
           </Link>
           <button
             onClick={onClose}
@@ -149,7 +149,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Footer */}
         <div className="absolute bottom-0 w-full px-6 py-4 border-t border-gray-100">
           <p className="text-xs text-desc_gray text-center">
-            © 2025 Cameron Highlands Tours
+            © 2025 Mossy Forest Tours
           </p>
         </div>
       </aside>

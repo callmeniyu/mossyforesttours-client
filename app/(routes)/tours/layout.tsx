@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/seoUtils";
 
 export const metadata: Metadata = generatePageMetadata(
-  "Cameron Highlands Tours | Mossy Forest & Sunrise Adventures",
+  "Mossy Forest Tours | Mossy Forest & Sunrise Adventures",
   "Discover Cameron Highlands with our complete collection of tours including Mossy Forest adventures, sunrise viewpoint tours, Land Rover rides, and eco tours. Private and shared tour options available across Cameron Highlands.",
   "/tours",
   [

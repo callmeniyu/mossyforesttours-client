@@ -119,7 +119,7 @@ export default function Navbar() {
             href="/"
             className="text-lg sm:text-xl font-bold font-poppins text-primary tracking-tight"
           >
-            Cameron Highlands Tours
+            Mossy Forest Tours
           </Link>
         </div>
 

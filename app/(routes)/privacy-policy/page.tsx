@@ -17,7 +17,7 @@ export default function TermsAndConditions() {
         "A booking confirmation will be sent automatically to the guest’s registered email after successful payment.",
         "Guests must present their booking confirmation during check-in. Both printed and mobile versions are accepted, but the confirmation must clearly show the guest name, dates, and booking details.",
         "For tours and transport services, guests are required to show proof of booking before boarding or joining. Failure to provide confirmation may result in denial of service.",
-        "Guests are responsible for ensuring that their booking information is correct. Any errors must be reported to Cameron Highlands Tours immediately.",
+        "Guests are responsible for ensuring that their booking information is correct. Any errors must be reported to Mossy Forest Tours immediately.",
       ],
       id: "confirmation",
     },
@@ -27,7 +27,7 @@ export default function TermsAndConditions() {
         "All cancellation requests must be submitted in writing through email or the official booking platform used at the time of reservation.",
         "Refund eligibility depends on the type of booking and the cancellation period. Tours canceled 48 hours or more before departure receive a full refund. Cancellations within 48 hours are non-refundable.",
         "No-shows without prior notice will be charged the full booking amount.",
-        "Cameron Highlands Tours is not responsible for cancellations caused by weather, transportation delays, or unforeseen circumstances beyond its control.",
+        "Mossy Forest Tours is not responsible for cancellations caused by weather, transportation delays, or unforeseen circumstances beyond its control.",
         "Travel insurance is strongly recommended to protect against unexpected cancellations.",
       ],
       id: "cancellation",
@@ -38,7 +38,7 @@ export default function TermsAndConditions() {
         "Complimentary pick-up service is available for hotels and accommodations located in Tanah Rata, Brinchang, Kea Farm, and nearby areas within Cameron Highlands.",
         "Guests staying outside standard pick-up zones must arrange their own transport to the designated meeting point, or a surcharge may apply.",
         "Guests are expected to be ready at the hotel lobby or pick-up point at least 10 minutes before the scheduled departure time.",
-        "Pick-up and drop-off times may vary slightly due to traffic and weather conditions. Cameron Highlands Tours is not liable for delays caused by external factors.",
+        "Pick-up and drop-off times may vary slightly due to traffic and weather conditions. Mossy Forest Tours is not liable for delays caused by external factors.",
         "For private tours, custom pick-up arrangements can be made upon request during booking.",
       ],
       id: "pickup",
@@ -57,7 +57,7 @@ export default function TermsAndConditions() {
     {
       title: "Accessibility",
       content: [
-        "Cameron Highlands Tours welcomes all guests. However, some tours involve uneven terrain, stairs, or moderate physical activity that may not be suitable for guests with limited mobility.",
+        "Mossy Forest Tours welcomes all guests. However, some tours involve uneven terrain, stairs, or moderate physical activity that may not be suitable for guests with limited mobility.",
         "Wheelchair access may be limited on certain tours due to natural terrain and attraction layouts.",
         "Guests with medical conditions, physical limitations, or special requirements are strongly advised to inform us before booking so appropriate arrangements can be made.",
         "While we make reasonable efforts to accommodate special needs, accessibility cannot be guaranteed for all tours and locations.",
@@ -70,10 +70,10 @@ export default function TermsAndConditions() {
         "Guests must bring valid identification and booking confirmation for verification before joining tours.",
         "Entrance fees to attractions are included in tour prices unless stated otherwise.",
         "It is the guest’s responsibility to bring valid identification and booking confirmation in English for verification at check-in or before joining a tour.",
-        "Cameron Highlands Tours is not responsible for loss, theft, or damage to guests’ personal belongings during tours. Guests are encouraged to keep valuables secure.",
+        "Mossy Forest Tours is not responsible for loss, theft, or damage to guests' personal belongings during tours. Guests are encouraged to keep valuables secure.",
         "Travel insurance is strongly recommended to cover medical needs, trip cancellations, and personal belongings.",
         "Weather conditions in Cameron Highlands can be unpredictable. Guests should bring appropriate clothing, including light jackets and rain protection.",
-        "By confirming a booking, guests agree to comply with all Cameron Highlands Tours policies and local laws during their stay and activities.",
+        "By confirming a booking, guests agree to comply with all Mossy Forest Tours policies and local laws during their stay and activities.",
       ],
       id: "notes",
     },
@@ -127,7 +127,7 @@ export default function TermsAndConditions() {
           Terms & Conditions
         </h1>
         <p className="text-xl max-w-2xl mx-auto">
-          Important information about your booking with Cameron Highlands Tours
+          Important information about your booking with Mossy Forest Tours
         </p>
       </div>
 

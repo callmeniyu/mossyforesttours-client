@@ -8,9 +8,9 @@ const allFaqs: FAQType[] = [
   // Tours FAQ
   {
     id: 1,
-    question: "What types of tours does Cameron Highlands Tours offer?",
+    question: "What types of tours does Mossy Forest Tours offer?",
     answer:
-      "Cameron Highlands Tours offers carefully curated, small-group day tours across the Cameron Highlands. We specialize in tea plantation visits, strawberry farm tours, nature trails, and cultural experiences designed for travelers who value calm, well-paced itineraries.",
+      "Mossy Forest Tours offers carefully curated, small-group day tours across the Cameron Highlands. We specialize in tea plantation visits, strawberry farm tours, nature trails, and cultural experiences designed for travelers who value calm, well-paced itineraries.",
     category: "Tours",
   },
   {
@@ -52,7 +52,7 @@ const allFaqs: FAQType[] = [
     id: 7,
     question: "Can I customize my tour itinerary?",
     answer:
-      "Yes. For private tours, we're happy to adjust the itinerary based on your interests. Please contact us at cameronhighlandstours.com@gmail.com to discuss your preferences.",
+      "Yes. For private tours, we're happy to adjust the itinerary based on your interests. Please contact us at mossyforesttours@gmail.com to discuss your preferences.",
     category: "Tours",
   },
   {
@@ -112,7 +112,7 @@ export default function FAQPage() {
         <div className="relative z-20 text-center px-4">
           <h1 className="text-4xl font-bold text-white mb-4">FAQs</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Find answers to common questions about Cameron Highlands Tours
+            Find answers to common questions about Mossy Forest Tours
           </p>
         </div>
       </div>

@@ -16,7 +16,7 @@
 }
 
 @layer utilities {
-    /* Modern utility classes for Cameron Highlands Tours */
+    /* Modern utility classes for Mossy Forest Tours */
     .section-title {
         @apply text-text-primary text-2xl md:text-3xl lg:text-4xl font-bold mb-2 tracking-tight;
     }

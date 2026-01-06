@@ -46,13 +46,13 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto mt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-text-secondary">
-        <div>© 2025 Cameron Highlands Tours. All rights reserved.</div>
+        <div>© 2025 Mossy Forest Tours. All rights reserved.</div>
         <div className="flex items-center gap-3 text-sm">
           <a
-            href="mailto:cameronhighlandstours.com@gmail.com"
+            href="mailto:mossyforesttours@gmail.com"
             className="hover:text-primary transition-colors"
           >
-            cameronhighlandstours.com@gmail.com
+            mossyforesttours@gmail.com
           </a>
           <span className="hidden md:inline text-neutral-300">|</span>
         </div>

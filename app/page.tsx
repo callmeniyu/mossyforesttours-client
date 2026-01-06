@@ -312,10 +312,10 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap gap-3 text-sm font-semibold">
             <a
-              href="mailto:cameronhighlandstours.com@gmail.com"
+              href="mailto:mossyforesttours@gmail.com"
               className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary-dark transition-colors"
             >
-              ✉️ cameronhighlandstours.com@gmail.com
+              ✉️ mossyforesttours@gmail.com
             </a>
           </div>
         </div>

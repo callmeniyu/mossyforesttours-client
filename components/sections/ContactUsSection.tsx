@@ -37,7 +37,7 @@ export default function ContactInfo() {
             </div>
             <h4 className="mt-3 font-semibold text-title_black">Gmail</h4>
             <p className="text-sm text-desc_gray mt-1">
-              cameronhighlandstours.com@gmail.com
+              mossyforesttours@gmail.com
             </p>
           </div>
         </div>

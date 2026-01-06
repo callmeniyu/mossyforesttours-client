@@ -86,7 +86,7 @@ export default function TransferSEOLinks({
             href="/tours"
             className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm hover:bg-green-200 transition-colors"
           >
-            Cameron Highlands Tours
+            Mossy Forest Tours
           </Link>
           <Link
             href="/tours/mossy-forest"

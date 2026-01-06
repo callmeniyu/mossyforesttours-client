@@ -209,11 +209,11 @@ export const SOCIAL_LINKS = {
 
 // Website constants
 export const SITE_CONFIG = {
-  name: 'Cameron Highlands Tours',
-  title: 'Cameron Highlands Tours - Mossy Forest, Sunrise & Transfers',
+  name: 'Mossy Forest Tours',
+  title: 'Mossy Forest Tours - Mossy Forest, Sunrise & Transfers',
   description: 'Discover Cameron Highlands with our premium tours and transfers. From Mossy Forest adventures to sunrise viewpoint tours and reliable transfers to Taman Negara & Perhentian Islands.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://cameronhighlandstours.com', // Updated fallback domain
-  author: 'Cameron Highlands Tours Team',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://mossyforesttours.my', // Updated fallback domain
+  author: 'Mossy Forest Tours Team',
   keywords: [
     ...SEO_KEYWORDS.destinations,
     ...SEO_KEYWORDS.tours.slice(0, 15), // First 15 tour keywords
@@ -429,7 +429,7 @@ export function generateTourMetadata(tour: any): Metadata {
   // Extract destination from title or tags
   const destination = extractDestination(tour.title, tour.tags) || 'Cameron Highlands';
 
-  const title = `${tour.title} | ${tour.type === 'private' ? 'Private' : 'Shared'} Tour in ${destination} - Cameron Highlands Tours`;
+  const title = `${tour.title} | ${tour.type === 'private' ? 'Private' : 'Shared'} Tour in ${destination} - Mossy Forest Tours`;
   const description = truncateText(
     stripHtmlTags(tour.description || tour.desc || `Explore ${destination} with our ${tour.type} tour. ${tour.title} - Book now for an unforgettable adventure.`),
     160
@@ -497,7 +497,7 @@ export function generateTransferMetadata(transfer: any): Metadata {
     `${transfer.from} to ${transfer.to} transfer`,
   ];
 
-  const title = `${transfer.title} | ${transferType} Transfer from ${transfer.from} to ${transfer.to} - Cameron Highlands Tours`;
+  const title = `${transfer.title} | ${transferType} Transfer from ${transfer.from} to ${transfer.to} - Mossy Forest Tours`;
 
   // Enhanced description with route details and benefits
   const baseDescription = stripHtmlTags(transfer.description || transfer.desc || '');
@@ -509,7 +509,7 @@ export function generateTransferMetadata(transfer: any): Metadata {
       'Shared van service, budget-friendly, reliable schedule';
 
   const description = baseDescription ||
-    `${routeInfo}. ${features}. Book your Cameron Highlands transfer with Cameron Highlands Tours for a safe and comfortable journey.`;
+    `${routeInfo}. ${features}. Book your Cameron Highlands transfer with Mossy Forest Tours for a safe and comfortable journey.`;
 
   // Enhanced keywords based on route and type - NOW INCLUDING HIGH-PRIORITY SEARCH TERMS
   const routeKeywords = [
@@ -577,9 +577,9 @@ export function generatePageMetadata(
 
 // Main function to generate complete metadata for blogs
 export function generateBlogMetadata(blog: any): Metadata {
-  const title = `${blog.title} | ${blog.category} Blog - Cameron Highlands Tours`;
+  const title = `${blog.title} | ${blog.category} Blog - Mossy Forest Tours`;
   const description = truncateText(
-    stripHtmlTags(blog.description || blog.content || `Read about ${blog.title} on Cameron Highlands Tours blog. Discover travel tips, destination guides, and more.`),
+    stripHtmlTags(blog.description || blog.content || `Read about ${blog.title} on Mossy Forest Tours blog. Discover travel tips, destination guides, and more.`),
     160
   );
 

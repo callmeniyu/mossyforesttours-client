@@ -889,10 +889,10 @@ export default function TourDetailPage() {
               <div className="mt-3 sm:mt-4 text-center text-xs sm:text-sm text-text-light">
                 Questions? Email us at{""}
                 <a
-                  href="mailto:cameronhighlandstours.com@gmail.com"
+                  href="mailto:mossyforesttours@gmail.com"
                   className="text-primary font-medium hover:underline block"
                 >
-                  cameronhighlandstours.com@gmail.com
+                  mossyforesttours@gmail.com
                 </a>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { generatePageMetadata } from "@/lib/seoUtils";
 
 export const metadata: Metadata = generatePageMetadata(
   "Contact Us",
-  "Get in touch with Oastel for tours and transfers in Cameron Highlands. WhatsApp, Instagram, or email us for Cameron Highlands tours, transfers to Perhentian Islands, and more.",
+  "Get in touch with Oastel for tours and transfers in Cameron Highlands. WhatsApp, Instagram, or email us for Mossy Forest Tours, transfers to Perhentian Islands, and more.",
   "/contact-us",
   [
     "contact Oastel",

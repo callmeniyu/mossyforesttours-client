@@ -16,11 +16,11 @@ import {
 
 export const metadata: Metadata = {
   title: {
-    default: "Cameron Highlands Tours - Discover Amazing Tours & Experiences",
-    template: "%s - Cameron Highlands Tours",
+    default: "Mossy Forest Tours - Discover Amazing Tours & Experiences",
+    template: "%s - Mossy Forest Tours",
   },
   description:
-    "Discover the best Cameron Highlands tours and experiences. Book your perfect adventure with Cameron Highlands Tours - your gateway to unforgettable memories.",
+    "Discover the best Cameron Highlands tours and experiences. Book your perfect adventure with Mossy Forest Tours - your gateway to unforgettable memories.",
   keywords: [
     "Cameron Highlands tours",
     "Cameron Highlands activities",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     "Cameron Highlands packages",
     "Cameron Highlands adventures",
   ].join(", "),
-  authors: [{ name: "Cameron Highlands Tours" }],
-  creator: "Cameron Highlands Tours",
-  publisher: "Cameron Highlands Tours",
+  authors: [{ name: "Mossy Forest Tours" }],
+  creator: "Mossy Forest Tours",
+  publisher: "Mossy Forest Tours",
   robots: {
     index: true,
     follow: true,
@@ -94,11 +94,11 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "TravelAgency",
-              name: "Cameron Highlands Tours",
+              name: "Mossy Forest Tours",
               description:
                 "Discover the best Cameron Highlands tours and experiences with our curated tour packages",
-              url: "https://cameronhighlandstours.com",
-              logo: "https://cameronhighlandstours.com/images/logo.png",
+              url: "https://mossyforesttours.my",
+              logo: "https://mossyforesttours.my/images/logo.png",
               address: {
                 "@type": "PostalAddress",
                 addressRegion: "Cameron Highlands",
