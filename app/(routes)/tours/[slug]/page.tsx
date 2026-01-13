@@ -548,6 +548,104 @@ export default function TourDetailPage() {
                 </div>
               </div>
 
+              {/* Time Slots - Show only when date is selected */}
+              {selectedDate && (
+                <div className="mb-4">
+                  <label className="block text-sm font-semibold text-text-primary mb-2">
+                    Select Time Slot
+                  </label>
+
+                  {loadingSlots ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    </div>
+                  ) : timeSlots.length === 0 ? (
+                    <div className="text-center py-6 px-4 bg-amber-50 border border-amber-200 rounded-xl">
+                      <p className="text-sm text-amber-800">
+                        No time slots available for this date
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      {timeSlots.map((slot) => {
+                        const availableSpots = slot.capacity - slot.bookedCount;
+                        const isDisabled =
+                          !slot.isAvailable || availableSpots === 0;
+                        const isSelected = selectedTime === slot.time;
+
+                        return (
+                          <button
+                            key={slot.time}
+                            onClick={() =>
+                              !isDisabled && setSelectedTime(slot.time)
+                            }
+                            disabled={isDisabled}
+                            className={`
+                              px-3 py-3 rounded-xl text-sm font-medium transition-all relative
+                              ${
+                                isSelected
+                                  ? "bg-primary text-white ring-2 ring-primary ring-offset-2"
+                                  : isDisabled
+                                  ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                                  : "bg-white border-2 border-neutral-200 text-text-primary hover:border-primary hover:bg-primary/5"
+                              }
+                            `}
+                          >
+                            <div className="font-semibold">{slot.time}</div>
+                            {!isDisabled && (
+                              <div
+                                className={`text-xs mt-1 ${
+                                  isSelected
+                                    ? "text-white/80"
+                                    : "text-text-light"
+                                }`}
+                              >
+                                Seats available
+                              </div>
+                            )}
+                            {isDisabled && (
+                              <div className="text-xs mt-1">
+                                {slot.isAvailable ? "Full" : "Closed"}
+                              </div>
+                            )}
+                            {slot.bookedCount === 0 && !isDisabled && (
+                              <div
+                                className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
+                                  isSelected ? "bg-yellow-300" : "bg-accent"
+                                }`}
+                              />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Show minimum person info if a slot is selected */}
+                  {selectedTime &&
+                    timeSlots.find((s) => s.time === selectedTime) && (
+                      <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p className="text-xs text-blue-800">
+                          <strong>Note:</strong> This time slot requires a
+                          minimum of{" "}
+                          <strong>
+                            {
+                              timeSlots.find((s) => s.time === selectedTime)
+                                ?.currentMinimum
+                            }
+                          </strong>{" "}
+                          guest
+                          {timeSlots.find((s) => s.time === selectedTime)
+                            ?.currentMinimum !== 1
+                            ? "s"
+                            : ""}
+                          .
+                        </p>
+                      </div>
+                    )}
+                </div>
+              )}
+
               {/* Guests */}
               <div className="mb-4 sm:mb-6 gap">
                 <label className="block text-sm font-semibold text-text-primary mb-3">
