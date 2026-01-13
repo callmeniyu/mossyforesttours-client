@@ -520,9 +520,7 @@ export default function TourDetailPage() {
                         font-weight: 600;
                       }
                       .rdp-day_today
-                        .rdp-day_button:not(
-                          .rdp-day_selected .rdp-day_button
-                        ) {
+                        .rdp-day_button:not(.rdp-day_selected .rdp-day_button) {
                         font-weight: 700;
                         color: #059669;
                       }
