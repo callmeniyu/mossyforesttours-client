@@ -40,7 +40,6 @@ export default function TourDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [showCalendar, setShowCalendar] = useState(false);
   const [selectedTime, setSelectedTime] = useState("");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -159,26 +158,6 @@ export default function TourDetailPage() {
 
     fetchTimeSlots();
   }, [selectedDate, tour?._id]);
-
-  // Close calendar when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target as Node)
-      ) {
-        setShowCalendar(false);
-      }
-    };
-
-    if (showCalendar) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showCalendar]);
 
   // Validate booking before proceeding
   const validateBooking = (): boolean => {
@@ -374,11 +353,343 @@ export default function TourDetailPage() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6">
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-          {/* Left Column - Tour Info */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-            {/* Title & Basic Info */}
+        <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-8">
+          {/* Mobile Title (visible only on mobile, hidden on lg) */}
+          <div className="block lg:hidden order-1 mb-4">
             <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft">
+              <span className="inline-block px-2.5 sm:px-3 py-1 bg-primary-light text-primary text-xs font-semibold rounded-lg mb-2 sm:mb-3">
+                {tour.type}
+              </span>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-text-primary mb-3 sm:mb-4">
+                {tour.title}
+              </h1>
+
+              <div className="flex flex-wrap gap-3 sm:gap-4 text-text-secondary text-xs sm:text-sm">
+                <div className="flex items-center gap-2">
+                  <FiClock className="text-primary text-lg" />
+                  <span>{tour.duration}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FiUsers className="text-primary text-lg" />
+                  <span>
+                    {tour.minimumPerson}-{tour.maximumPerson || 50} people
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <IoBookmarkOutline className="text-primary text-lg font-bold" />
+                  <span>{tour.bookedCount || 0} Booked</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Booking Card (visible only on mobile) */}
+          <div className="block lg:hidden order-2 mb-4">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-medium border border-neutral-100">
+              {/* Price */}
+              <div className="mb-4 sm:mb-6">
+                <div className="flex items-baseline gap-2 mb-1">
+                  {tour.oldPrice > tour.newPrice && (
+                    <span className="text-text-light line-through text-base sm:text-lg">
+                      RM {tour.oldPrice}
+                    </span>
+                  )}
+                  <span className="text-2xl sm:text-3xl font-bold text-primary">
+                    RM {tour.newPrice}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-text-secondary mb-1">
+                  <TourPriceDisplay price={tour.newPrice} label="per adult" />
+                </div>
+                <div className="text-text-light text-xs mt-1">
+                  Child (3-11 years): RM {tour.childPrice} (
+                  <TourPriceDisplay price={tour.childPrice} />)
+                </div>
+              </div>
+
+              {/* Date Selection */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
+                  Select Date
+                </label>
+                <div className="relative" ref={calendarRef}>
+                  <div className="w-full bg-white rounded-2xl shadow-soft border border-neutral-100 p-4">
+                    <style jsx global>{`
+                      .rdp {
+                        --rdp-accent-color: #059669;
+                        --rdp-background-color: #d1fae5;
+                        --rdp-accent-color-dark: #047857;
+                        --rdp-background-color-dark: #a7f3d0;
+                        --rdp-outline: 2px solid var(--rdp-accent-color);
+                        --rdp-outline-selected: 2px solid
+                          var(--rdp-accent-color);
+                        margin: 0;
+                      }
+                      .rdp-months {
+                        justify-content: center;
+                      }
+                      .rdp-month {
+                        width: 100%;
+                      }
+                      .rdp-caption {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0.5rem 0 1rem 0;
+                        padding-right: 5rem; /* make room for clustered buttons */
+                      }
+                      .rdp-caption_label {
+                        font-size: 1rem;
+                        font-weight: 600;
+                        color: #1f2937;
+                      }
+                      .rdp-nav {
+                        position: absolute;
+                        top: 0.5rem;
+                        right: 0.5rem; /* cluster to the right */
+                        left: auto;
+                        display: flex;
+                        justify-content: flex-end; /* keep them together */
+                        gap: 0.35rem;
+                        align-items: center;
+                        width: auto; /* shrinkwrap the buttons */
+                        z-index: 5;
+                      }
+                      .rdp-button_previous,
+                      .rdp-button_next {
+                        width: 2rem;
+                        height: 2rem;
+                        border-radius: 0.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #059669;
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                      }
+                      .rdp-button_previous:hover,
+                      .rdp-button_next:hover {
+                        background: #d1fae5;
+                      }
+                      .rdp-button_previous svg,
+                      .rdp-button_next svg {
+                        color: #0f172a;
+                        fill: currentColor;
+                        width: 1rem;
+                        height: 1rem;
+                      }
+                      .rdp-button_previous:focus,
+                      .rdp-button_next:focus {
+                        outline: 2px solid #059669;
+                        outline-offset: 2px;
+                      }
+                      .rdp-head_cell {
+                        font-size: 0.75rem;
+                        font-weight: 500;
+                        color: #6b7280;
+                        text-transform: uppercase;
+                        padding: 0.5rem 0;
+                      }
+                      .rdp-day {
+                        width: 2.5rem;
+                        height: 2.5rem;
+                        border-radius: 0.5rem;
+                        font-size: 0.875rem;
+                        transition: all 0.2s;
+                      }
+                      .rdp-day_button {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 0.5rem;
+                        border: none;
+                        background: transparent;
+                        cursor: pointer;
+                        font-weight: 500;
+                        color: #1f2937;
+                      }
+                      .rdp-day_button:hover:not(
+                          .rdp-day_selected .rdp-day_button
+                        ) {
+                        background: #f3f4f6;
+                      }
+                      .rdp-day_selected .rdp-day_button {
+                        background: #059669;
+                        color: white;
+                        font-weight: 600;
+                      }
+                      .rdp-day_today
+                        .rdp-day_button:not(
+                          .rdp-day_selected .rdp-day_button
+                        ) {
+                        font-weight: 700;
+                        color: #059669;
+                      }
+                      .rdp-day_disabled .rdp-day_button {
+                        color: #d1d5db;
+                        cursor: not-allowed;
+                      }
+                      .rdp-day_disabled .rdp-day_button:hover {
+                        background: transparent;
+                      }
+                    `}</style>
+                    <DayPicker
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                      }}
+                      disabled={{ before: new Date() }}
+                      modifiersClassNames={{
+                        selected: "selected-day",
+                        today: "today-day",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Guests */}
+              <div className="mb-4 sm:mb-6 gap">
+                <label className="block text-sm font-semibold text-text-primary mb-3">
+                  Guests
+                </label>
+                <div className="flex justify-between gap-3">
+                  <label className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                    <FiUser className="text-primary text-base" />
+                    Adults
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setAdults(Math.max(1, adults - 1))}
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
+                    >
+                      −
+                    </button>
+                    <span className="w-10 sm:w-12 text-center font-semibold text-base sm:text-lg">
+                      {adults}
+                    </span>
+                    <button
+                      onClick={() =>
+                        setAdults(
+                          Math.min(tour.maximumPerson || 50, adults + 1)
+                        )
+                      }
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex justify-between">
+                  <label className="mt-4 items-center gap-2 text-xs sm:text-sm font-semibold text-text-primary mb-2">
+                    <div className="flex gap-2">
+                      <HiOutlineUserGroup className="text-primary text-lg" />
+                      Children
+                    </div>
+                    <p>(3-11 years)</p>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setChildren(Math.max(0, children - 1))}
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
+                    >
+                      −
+                    </button>
+                    <span className="w-10 sm:w-12 text-center font-semibold text-base sm:text-lg">
+                      {children}
+                    </span>
+                    <button
+                      onClick={() => setChildren(children + 1)}
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Total */}
+              <div className="border-t border-neutral-100 pt-3 sm:pt-4 mb-3 sm:mb-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-text-secondary">
+                    Subtotal ({adults + children} guest
+                    {adults + children !== 1 ? "s" : ""})
+                  </span>
+                  <span className="text-text-primary font-medium">
+                    RM {subtotalPrice.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-text-secondary">
+                    Bank Convenience Fee (3%)
+                  </span>
+                  <span className="text-text-primary font-medium">
+                    RM {convenienceFee.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-neutral-100">
+                  <span className="text-sm sm:text-base text-text-secondary font-semibold">
+                    Total
+                  </span>
+                  <span className="text-xl sm:text-2xl font-bold text-primary">
+                    RM {totalPrice.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Validation Error Display */}
+              {validationError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-sm text-red-800 flex items-center gap-2">
+                    <BsExclamationCircle className="flex-shrink-0" />
+                    <span>{validationError}</span>
+                  </p>
+                </div>
+              )}
+
+              {/* Book Now Button */}
+              <button
+                onClick={handleBook}
+                disabled={!selectedDate || !selectedTime}
+                className={`
+                  w-full py-3 sm:py-4 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl 
+                  transition-all active:scale-[0.98] flex items-center justify-center gap-2
+                  ${
+                    !selectedDate || !selectedTime
+                      ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
+                      : "bg-primary text-white hover:shadow-lg hover:bg-primary-dark"
+                  }
+                `}
+              >
+                {!selectedDate ? (
+                  <>Select Date to Continue</>
+                ) : !selectedTime ? (
+                  <>Select Time Slot to Continue</>
+                ) : (
+                  <>Book Now</>
+                )}
+              </button>
+
+              {/* Contact Info */}
+              <div className="mt-3 sm:mt-4 text-center text-xs sm:text-sm text-text-light">
+                Questions? Email us at{""}
+                <a
+                  href="mailto:mossyforesttours@gmail.com"
+                  className="text-primary font-medium hover:underline block"
+                >
+                  mossyforesttours@gmail.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Left Column - Tour Info */}
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 flex flex-col order-3 lg:order-none">
+            {/* Title & Basic Info */}
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft hidden lg:block">
               <span className="inline-block px-2.5 sm:px-3 py-1 bg-primary-light text-primary text-xs font-semibold rounded-lg mb-2 sm:mb-3">
                 {tour.type}
               </span>
@@ -405,7 +716,7 @@ export default function TourDetailPage() {
             </div>
 
             {/* About */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft order-3 lg:order-none">
               <h2 className="text-base sm:text-lg font-bold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
                 <FiInfo className="text-primary text-lg sm:text-xl" />
                 About This Tour
@@ -416,7 +727,7 @@ export default function TourDetailPage() {
             </div>
 
             {/* What's Included */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft order-4 lg:order-none">
               <h2 className="text-base sm:text-lg font-bold text-text-primary mb-3 sm:mb-4">
                 What's Included
               </h2>
@@ -435,7 +746,7 @@ export default function TourDetailPage() {
             </div>
 
             {/* Itinerary */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft order-5 lg:order-none">
               <h2 className="text-base sm:text-lg font-bold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
                 <IoTimeOutline className="text-primary text-lg sm:text-xl" />
                 Itinerary
@@ -446,7 +757,7 @@ export default function TourDetailPage() {
             </div>
 
             {/* Pickup Locations */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft">
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-soft order-6 lg:order-none">
               <h2 className="text-base sm:text-lg font-bold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
                 <MdOutlineDirectionsCar className="text-primary text-lg sm:text-xl" />
                 Pickup Locations
@@ -466,7 +777,7 @@ export default function TourDetailPage() {
             </div>
 
             {/* Important Notes */}
-            <div className="bg-amber-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-amber-200">
+            <div className="bg-amber-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-amber-200 order-7 lg:order-none">
               <h2 className="text-base sm:text-lg font-bold text-amber-800 mb-3 sm:mb-4 flex items-center gap-2">
                 <BsExclamationCircle className="text-amber-600 text-lg sm:text-xl" />
                 Important Notes
@@ -477,8 +788,8 @@ export default function TourDetailPage() {
             </div>
           </div>
 
-          {/* Right Column - Booking Card */}
-          <div className="lg:col-span-1 mt-4 sm:mt-6 lg:mt-0">
+          {/* Right Column - Booking Card (desktop only) */}
+          <div className="hidden lg:block lg:col-span-1 mt-4 sm:mt-6 lg:mt-0 lg:order-none">
             <div className="sticky top-20 bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-medium border border-neutral-100">
               {/* Price */}
               <div className="mb-4 sm:mb-6">
@@ -507,160 +818,138 @@ export default function TourDetailPage() {
                   Select Date
                 </label>
                 <div className="relative" ref={calendarRef}>
-                  <button
-                    type="button"
-                    onClick={() => setShowCalendar(!showCalendar)}
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer text-left flex items-center justify-between bg-white hover:border-primary/50 transition-colors"
-                  >
-                    <span
-                      className={
-                        selectedDate ? "text-text-primary" : "text-text-light"
+                  <div className="w-full bg-white rounded-2xl shadow-soft border border-neutral-100 p-4">
+                    <style jsx global>{`
+                      .rdp {
+                        --rdp-accent-color: #059669;
+                        --rdp-background-color: #d1fae5;
+                        --rdp-accent-color-dark: #047857;
+                        --rdp-background-color-dark: #a7f3d0;
+                        --rdp-outline: 2px solid var(--rdp-accent-color);
+                        --rdp-outline-selected: 2px solid
+                          var(--rdp-accent-color);
+                        margin: 0;
                       }
-                    >
-                      {selectedDate
-                        ? format(selectedDate, "PPP")
-                        : "Select a date"}
-                    </span>
-                    <FiCalendar className="text-primary" />
-                  </button>
-
-                  {showCalendar && (
-                    <div className="absolute z-50 mt-2 bg-white rounded-2xl shadow-xl border border-neutral-100 p-4">
-                      <style jsx global>{`
-                        .rdp {
-                          --rdp-accent-color: #059669;
-                          --rdp-background-color: #d1fae5;
-                          --rdp-accent-color-dark: #047857;
-                          --rdp-background-color-dark: #a7f3d0;
-                          --rdp-outline: 2px solid var(--rdp-accent-color);
-                          --rdp-outline-selected: 2px solid
-                            var(--rdp-accent-color);
-                          margin: 0;
-                        }
-                        .rdp-months {
-                          justify-content: center;
-                        }
-                        .rdp-month {
-                          width: 100%;
-                        }
-                        .rdp-caption {
-                          display: flex;
-                          justify-content: center;
-                          align-items: center;
-                          padding: 0.5rem 0 1rem 0;
-                          padding-right: 5rem; /* make room for clustered buttons */
-                        }
-                        .rdp-caption_label {
-                          font-size: 1rem;
-                          font-weight: 600;
-                          color: #1f2937;
-                        }
-                        .rdp-nav {
-                          position: absolute;
-                          top: 0.5rem;
-                          right: 0.5rem; /* cluster to the right */
-                          left: auto;
-                          display: flex;
-                          justify-content: flex-end; /* keep them together */
-                          gap: 0.35rem;
-                          align-items: center;
-                          width: auto; /* shrinkwrap the buttons */
-                          z-index: 5;
-                        }
-                        .rdp-button_previous,
-                        .rdp-button_next {
-                          width: 2rem;
-                          height: 2rem;
-                          border-radius: 0.5rem;
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          color: #059669;
-                          background: transparent;
-                          border: none;
-                          cursor: pointer;
-                          transition: all 0.2s;
-                        }
-                        .rdp-button_previous:hover,
-                        .rdp-button_next:hover {
-                          background: #d1fae5;
-                        }
-                        .rdp-button_previous svg,
-                        .rdp-button_next svg {
-                          color: #0f172a;
-                          fill: currentColor;
-                          width: 1rem;
-                          height: 1rem;
-                        }
-                        .rdp-button_previous:focus,
-                        .rdp-button_next:focus {
-                          outline: 2px solid #059669;
-                          outline-offset: 2px;
-                        }
-                        .rdp-head_cell {
-                          font-size: 0.75rem;
-                          font-weight: 500;
-                          color: #6b7280;
-                          text-transform: uppercase;
-                          padding: 0.5rem 0;
-                        }
-                        .rdp-day {
-                          width: 2.5rem;
-                          height: 2.5rem;
-                          border-radius: 0.5rem;
-                          font-size: 0.875rem;
-                          transition: all 0.2s;
-                        }
-                        .rdp-day_button {
-                          width: 100%;
-                          height: 100%;
-                          border-radius: 0.5rem;
-                          border: none;
-                          background: transparent;
-                          cursor: pointer;
-                          font-weight: 500;
-                          color: #1f2937;
-                        }
-                        .rdp-day_button:hover:not(
-                            .rdp-day_selected .rdp-day_button
-                          ) {
-                          background: #f3f4f6;
-                        }
-                        .rdp-day_selected .rdp-day_button {
-                          background: #059669;
-                          color: white;
-                          font-weight: 600;
-                        }
-                        .rdp-day_today
-                          .rdp-day_button:not(
-                            .rdp-day_selected .rdp-day_button
-                          ) {
-                          font-weight: 700;
-                          color: #059669;
-                        }
-                        .rdp-day_disabled .rdp-day_button {
-                          color: #d1d5db;
-                          cursor: not-allowed;
-                        }
-                        .rdp-day_disabled .rdp-day_button:hover {
-                          background: transparent;
-                        }
-                      `}</style>
-                      <DayPicker
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={(date) => {
-                          setSelectedDate(date);
-                          setShowCalendar(false);
-                        }}
-                        disabled={{ before: new Date() }}
-                        modifiersClassNames={{
-                          selected: "selected-day",
-                          today: "today-day",
-                        }}
-                      />
-                    </div>
-                  )}
+                      .rdp-months {
+                        justify-content: center;
+                      }
+                      .rdp-month {
+                        width: 100%;
+                      }
+                      .rdp-caption {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0.5rem 0 1rem 0;
+                        padding-right: 5rem; /* make room for clustered buttons */
+                      }
+                      .rdp-caption_label {
+                        font-size: 1rem;
+                        font-weight: 600;
+                        color: #1f2937;
+                      }
+                      .rdp-nav {
+                        position: absolute;
+                        top: 0.5rem;
+                        right: 0.5rem; /* cluster to the right */
+                        left: auto;
+                        display: flex;
+                        justify-content: flex-end; /* keep them together */
+                        gap: 0.35rem;
+                        align-items: center;
+                        width: auto; /* shrinkwrap the buttons */
+                        z-index: 5;
+                      }
+                      .rdp-button_previous,
+                      .rdp-button_next {
+                        width: 2rem;
+                        height: 2rem;
+                        border-radius: 0.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #059669;
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                      }
+                      .rdp-button_previous:hover,
+                      .rdp-button_next:hover {
+                        background: #d1fae5;
+                      }
+                      .rdp-button_previous svg,
+                      .rdp-button_next svg {
+                        color: #0f172a;
+                        fill: currentColor;
+                        width: 1rem;
+                        height: 1rem;
+                      }
+                      .rdp-button_previous:focus,
+                      .rdp-button_next:focus {
+                        outline: 2px solid #059669;
+                        outline-offset: 2px;
+                      }
+                      .rdp-head_cell {
+                        font-size: 0.75rem;
+                        font-weight: 500;
+                        color: #6b7280;
+                        text-transform: uppercase;
+                        padding: 0.5rem 0;
+                      }
+                      .rdp-day {
+                        width: 2.5rem;
+                        height: 2.5rem;
+                        border-radius: 0.5rem;
+                        font-size: 0.875rem;
+                        transition: all 0.2s;
+                      }
+                      .rdp-day_button {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 0.5rem;
+                        border: none;
+                        background: transparent;
+                        cursor: pointer;
+                        font-weight: 500;
+                        color: #1f2937;
+                      }
+                      .rdp-day_button:hover:not(
+                          .rdp-day_selected .rdp-day_button
+                        ) {
+                        background: #f3f4f6;
+                      }
+                      .rdp-day_selected .rdp-day_button {
+                        background: #059669;
+                        color: white;
+                        font-weight: 600;
+                      }
+                      .rdp-day_today
+                        .rdp-day_button:not(.rdp-day_selected .rdp-day_button) {
+                        font-weight: 700;
+                        color: #059669;
+                      }
+                      .rdp-day_disabled .rdp-day_button {
+                        color: #d1d5db;
+                        cursor: not-allowed;
+                      }
+                      .rdp-day_disabled .rdp-day_button:hover {
+                        background: transparent;
+                      }
+                    `}</style>
+                    <DayPicker
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                      }}
+                      disabled={{ before: new Date() }}
+                      modifiersClassNames={{
+                        selected: "selected-day",
+                        today: "today-day",
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
 
