@@ -81,7 +81,15 @@ export default function Home() {
         setIsLoading(true);
         const response = await tourApi.getTours({ limit: 10 });
         if (response.success) {
-          setTours(response.data);
+          const sortedTours = response.data.sort((a, b) => {
+            const aHasLabel = !!a.label;
+            const bHasLabel = !!b.label;
+            if (aHasLabel && !bHasLabel) return -1;
+            if (!aHasLabel && bHasLabel) return 1;
+            // both have or don't have label, sort by price ascending
+            return a.newPrice - b.newPrice;
+          });
+          setTours(sortedTours);
         }
       } catch (error) {
         console.error("Error fetching tours:", error);
