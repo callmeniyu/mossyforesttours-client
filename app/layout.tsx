@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
   title: {
-    default: "Mossy Forest Tours - Discover Amazing Tours & Experiences",
+    default: "Mossy Forest Eco Park-Guided Tours in Cameron Highlands",
     template: "%s - Mossy Forest Tours",
   },
   description:
