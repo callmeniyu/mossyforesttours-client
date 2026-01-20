@@ -15,9 +15,10 @@ import {
 // Use classic CDN import for Poppins to avoid turbopack/internal font handlers
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.mossyforest.my"),
   title: {
-    default: "Mossy Forest Eco Park-Guided Tours in Cameron Highlands",
-    template: "%s - Mossy Forest Tours",
+    default: "Mossy Forest Eco Park – Guided Tours in Cameron Highlands",
+    template: "%s | Mossy Forest Tours",
   },
   description:
     "Discover the magical Mossy Forest and explore Cameron Highlands with guided tours. Book Mossy Forest tours, tea plantation visits, sunrise tours, and Cameron Highlands experiences with Mossy Forest Tours.",
@@ -66,6 +67,17 @@ export const metadata: Metadata = {
     shortcut: "/favicons/favicon.ico",
     apple: "/favicons/apple-touch-icon.png",
   },
+  openGraph: {
+    type: "website",
+    url: "https://www.mossyforest.my",
+    siteName: "Mossy Forest Eco Park-Guided Tour",
+    title: "Mossy Forest Tours – Discover Amazing Tours & Experiences",
+    description:
+      "Discover the magical Mossy Forest and explore Cameron Highlands with guided tours.",
+  },
+  alternates: {
+    canonical: "https://www.mossyforest.my",
+  },
 };
 
 export default function RootLayout({
@@ -111,8 +123,8 @@ export default function RootLayout({
               name: "Mossy Forest Tours",
               description:
                 "Discover the best Cameron Highlands tours and experiences with our curated tour packages",
-              url: "https://mossyforest.my",
-              logo: "https://mossyforest.my/images/logo.png",
+              url: "https://www.mossyforest.my",
+              logo: "https://www.mossyforest.my/images/logo.png",
               address: {
                 "@type": "PostalAddress",
                 addressRegion: "Cameron Highlands",
@@ -124,6 +136,19 @@ export default function RootLayout({
                 contactType: "customer service",
                 availableLanguage: "English",
               },
+            }),
+          }}
+        />
+        {/* WebSite Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Mossy Forest Eco Park-Guided Tour",
+              alternateName: "Mossy Forest Eco Park Tours",
+              url: "https://www.mossyforest.my",
             }),
           }}
         />
