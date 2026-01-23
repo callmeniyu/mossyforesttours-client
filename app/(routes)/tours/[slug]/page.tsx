@@ -73,17 +73,23 @@ export default function TourDetailPage() {
           // Fetch actual reviews to get combined count
           try {
             const reviewsRes = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/tour/${response.data._id}`
+              `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/tour/${response.data._id}`,
             );
             const reviewsData = await reviewsRes.json();
             if (reviewsData.success) {
               const actualCount = reviewsData.data?.length || 0;
-              const adminCount = response.data.reviewCount || 0;
+              // Use adminReviewCount if available, fall back to reviewCount
+              const adminCount =
+                response.data.adminReviewCount ??
+                response.data.reviewCount ??
+                0;
               setCombinedReviewCount(adminCount + actualCount);
             }
           } catch (err) {
             console.warn("Failed to fetch actual reviews:", err);
-            setCombinedReviewCount(response.data.reviewCount || 0);
+            const fallbackCount =
+              response.data.adminReviewCount ?? response.data.reviewCount ?? 0;
+            setCombinedReviewCount(fallbackCount);
           }
         }
       } catch (error) {
@@ -119,7 +125,7 @@ export default function TourDetailPage() {
           String(selectedDate.getDate()).padStart(2, "0");
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/timeslots/available?packageType=tour&packageId=${tour._id}&date=${dateString}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/timeslots/available?packageType=tour&packageId=${tour._id}&date=${dateString}`,
         );
         const data = await response.json();
 
@@ -130,7 +136,7 @@ export default function TourDetailPage() {
           // Auto-select first available slot
           if (slots.length > 0) {
             const firstAvailableSlot = slots.find(
-              (slot: any) => slot.isAvailable
+              (slot: any) => slot.isAvailable,
             );
             if (firstAvailableSlot) {
               setSelectedTime(firstAvailableSlot.time);
@@ -141,7 +147,7 @@ export default function TourDetailPage() {
           console.log(`📅 Loaded ${slots.length} time slots for ${dateString}`);
           slots.forEach((slot: any) => {
             console.log(
-              `⏰ ${slot.time}: Available=${slot.isAvailable}, Booked=${slot.bookedCount}/${slot.capacity}, MinPerson=${slot.currentMinimum}`
+              `⏰ ${slot.time}: Available=${slot.isAvailable}, Booked=${slot.bookedCount}/${slot.capacity}, MinPerson=${slot.currentMinimum}`,
             );
           });
         } else {
@@ -192,11 +198,11 @@ export default function TourDetailPage() {
     if (totalGuests < selectedSlot.currentMinimum) {
       if (selectedSlot.bookedCount === 0) {
         setValidationError(
-          `First booking requires at least ${selectedSlot.currentMinimum} guests for this tour`
+          `First booking requires at least ${selectedSlot.currentMinimum} guests for this tour`,
         );
       } else {
         setValidationError(
-          `Minimum ${selectedSlot.currentMinimum} guests required for this slot`
+          `Minimum ${selectedSlot.currentMinimum} guests required for this slot`,
         );
       }
       return false;
@@ -206,7 +212,7 @@ export default function TourDetailPage() {
     const availableCapacity = selectedSlot.capacity - selectedSlot.bookedCount;
     if (totalGuests > availableCapacity) {
       setValidationError(
-        `Only ${availableCapacity} spots available for this time slot`
+        `Only ${availableCapacity} spots available for this time slot`,
       );
       return false;
     }
@@ -586,8 +592,8 @@ export default function TourDetailPage() {
                                 isSelected
                                   ? "bg-primary text-white ring-2 ring-primary ring-offset-2"
                                   : isDisabled
-                                  ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
-                                  : "bg-white border-2 border-neutral-200 text-text-primary hover:border-primary hover:bg-primary/5"
+                                    ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                                    : "bg-white border-2 border-neutral-200 text-text-primary hover:border-primary hover:bg-primary/5"
                               }
                             `}
                           >
@@ -669,7 +675,7 @@ export default function TourDetailPage() {
                     <button
                       onClick={() =>
                         setAdults(
-                          Math.min(tour.maximumPerson || 50, adults + 1)
+                          Math.min(tour.maximumPerson || 50, adults + 1),
                         )
                       }
                       className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"
@@ -867,7 +873,7 @@ export default function TourDetailPage() {
                     >
                       {location}
                     </span>
-                  )
+                  ),
                 )}
               </div>
             </div>
@@ -1087,8 +1093,8 @@ export default function TourDetailPage() {
                                 isSelected
                                   ? "bg-primary text-white ring-2 ring-primary ring-offset-2"
                                   : isDisabled
-                                  ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
-                                  : "bg-white border-2 border-neutral-200 text-text-primary hover:border-primary hover:bg-primary/5"
+                                    ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                                    : "bg-white border-2 border-neutral-200 text-text-primary hover:border-primary hover:bg-primary/5"
                               }
                             `}
                           >
@@ -1170,7 +1176,7 @@ export default function TourDetailPage() {
                     <button
                       onClick={() =>
                         setAdults(
-                          Math.min(tour.maximumPerson || 50, adults + 1)
+                          Math.min(tour.maximumPerson || 50, adults + 1),
                         )
                       }
                       className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-neutral-100 text-text-primary hover:bg-neutral-200 active:scale-95 transition-all font-medium text-lg"

@@ -17,7 +17,7 @@ type ModernTourCardHomeProps = {
   price: number;
   originalPrice?: number;
   rating: number;
-  reviewCount: number;
+  reviewCount: number; // Admin's predefined review count (passed as reviewCount for backward compatibility)
   label?: string;
   category: string;
   bookedCount?: number | string;
@@ -40,7 +40,7 @@ export default function ModernTourCardHome({
 }: ModernTourCardHomeProps) {
   const [actualReviewCount, setActualReviewCount] = useState(0);
   const [combinedReviewCount, setCombinedReviewCount] = useState(
-    reviewCount || 0
+    reviewCount || 0,
   );
 
   useEffect(() => {
@@ -48,12 +48,13 @@ export default function ModernTourCardHome({
     const fetchActualReviews = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/tour/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/tour/${id}`,
         );
         const data = await res.json();
         if (data.success) {
           const actualCount = data.data?.length || 0;
           setActualReviewCount(actualCount);
+          // reviewCount prop now contains adminReviewCount (admin's predefined value)
           setCombinedReviewCount((reviewCount || 0) + actualCount);
         }
       } catch (err) {
@@ -61,7 +62,7 @@ export default function ModernTourCardHome({
       }
     };
     fetchActualReviews();
-  }, [id, reviewCount]);
+  }, [id, reviewCount]); // reviewCount here is actually adminReviewCount from parent
 
   const { convertToUSD, convertToEUR } = useCurrency();
 
@@ -99,7 +100,7 @@ export default function ModernTourCardHome({
           {label && (
             <span
               className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${getLabelStyles(
-                label
+                label,
               )}`}
             >
               {label}

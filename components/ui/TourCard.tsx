@@ -23,7 +23,8 @@ type TourCardProps = {
   duration: string;
   bookedCount: string | number;
   rating?: number;
-  reviewCount?: number;
+  reviewCount?: number; // Actual user reviews
+  adminReviewCount?: number; // Admin's predefined review count
   oldPrice: number;
   newPrice: number;
   type: string;
@@ -41,35 +42,39 @@ export default function TourCard({
   bookedCount,
   rating,
   reviewCount,
+  adminReviewCount,
   oldPrice,
   newPrice,
   type,
   label,
 }: TourCardProps) {
   const [actualReviewCount, setActualReviewCount] = useState(0);
-  const [combinedReviewCount, setCombinedReviewCount] = useState(
-    reviewCount || 0
-  );
+  // Use adminReviewCount if available, otherwise fall back to reviewCount
+  const adminPredefinedCount = adminReviewCount ?? reviewCount ?? 0;
+  const [combinedReviewCount, setCombinedReviewCount] =
+    useState(adminPredefinedCount);
 
   useEffect(() => {
     // Fetch actual reviews from API to get real count
     const fetchActualReviews = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/tour/${_id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/tour/${_id}`,
         );
         const data = await res.json();
         if (data.success) {
           const actualCount = data.data?.length || 0;
           setActualReviewCount(actualCount);
-          setCombinedReviewCount((reviewCount || 0) + actualCount);
+          // Use admin's predefined value + actual reviews
+          const predefined = adminReviewCount ?? reviewCount ?? 0;
+          setCombinedReviewCount(predefined + actualCount);
         }
       } catch (err) {
         console.warn("Failed to fetch actual reviews:", err);
       }
     };
     fetchActualReviews();
-  }, [_id, reviewCount]);
+  }, [_id, adminReviewCount, reviewCount]);
 
   // Label styling based on type
   const getLabelStyles = (labelType: string) => {
@@ -114,7 +119,7 @@ export default function TourCard({
       {label && (
         <div
           className={`absolute top-3 left-3 z-10 px-3 py-1 rounded-full text-xs font-semibold ${getLabelStyles(
-            label
+            label,
           )}`}
         >
           {label}

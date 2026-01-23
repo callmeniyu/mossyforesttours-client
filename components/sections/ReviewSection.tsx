@@ -14,6 +14,7 @@ interface Review {
   userImage?: string;
   rating: number;
   comment: string;
+  images?: string[]; // Array of image URLs
   createdAt: string;
 }
 
@@ -39,6 +40,8 @@ export default function ReviewSection({
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
   // Generate initials for text avatar
   const getInitials = (name: string) => {
@@ -72,7 +75,8 @@ export default function ReviewSection({
 
       // API shape: { success: true, data: package }
       const pkg = data?.data || data;
-      const count = pkg?.reviewCount ?? 0;
+      // Use adminReviewCount if available, fall back to reviewCount for backward compatibility
+      const count = pkg?.adminReviewCount ?? pkg?.reviewCount ?? 0;
       setAdminReviewCount(Number(count) || 0);
     } catch (err) {
       console.warn("Failed to fetch package review count:", err);
@@ -83,7 +87,7 @@ export default function ReviewSection({
   const fetchReviews = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/${packageType}/${packageId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/${packageType}/${packageId}`,
       );
       const data = await response.json();
 
@@ -95,6 +99,7 @@ export default function ReviewSection({
           userImage: review.userId?.image,
           rating: review.rating,
           comment: review.comment,
+          images: review.images || [], // Include review images
           createdAt: review.createdAt,
         }));
         setReviews(transformedReviews);
@@ -106,6 +111,71 @@ export default function ReviewSection({
     }
   };
 
+  // Handle image selection
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+    const totalImages = selectedImages.length + fileArray.length;
+
+    if (totalImages > 3) {
+      showToast({
+        type: "error",
+        title: "Too Many Images",
+        message: "You can only upload up to 3 images",
+      });
+      return;
+    }
+
+    // Validate file types and sizes
+    const validFiles = fileArray.filter((file) => {
+      const isValidType = file.type.startsWith("image/");
+      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+
+      if (!isValidType) {
+        showToast({
+          type: "error",
+          title: "Invalid File Type",
+          message: `${file.name} is not an image`,
+        });
+        return false;
+      }
+
+      if (!isValidSize) {
+        showToast({
+          type: "error",
+          title: "File Too Large",
+          message: `${file.name} exceeds 5MB limit`,
+        });
+        return false;
+      }
+
+      return true;
+    });
+
+    // Create preview URLs
+    const newPreviewUrls = validFiles.map((file) => URL.createObjectURL(file));
+
+    setSelectedImages([...selectedImages, ...validFiles]);
+    setImagePreviewUrls([...imagePreviewUrls, ...newPreviewUrls]);
+  };
+
+  // Remove selected image
+  const removeImage = (index: number) => {
+    const newImages = [...selectedImages];
+    const newPreviews = [...imagePreviewUrls];
+
+    // Revoke the URL to free memory
+    URL.revokeObjectURL(newPreviews[index]);
+
+    newImages.splice(index, 1);
+    newPreviews.splice(index, 1);
+
+    setSelectedImages(newImages);
+    setImagePreviewUrls(newPreviews);
+  };
+
   const checkUserReview = async () => {
     if (!user?.email) return;
 
@@ -114,8 +184,8 @@ export default function ReviewSection({
         `${
           process.env.NEXT_PUBLIC_API_URL
         }/api/reviews/check/${packageType}/${packageId}/${encodeURIComponent(
-          user.email
-        )}`
+          user.email,
+        )}`,
       );
       const data = await response.json();
 
@@ -160,22 +230,26 @@ export default function ReviewSection({
     setIsSubmitting(true);
 
     try {
+      // Create FormData for multipart/form-data submission
+      const formData = new FormData();
+      formData.append("packageId", packageId);
+      formData.append("packageType", packageType);
+      formData.append("userName", user.name || "Anonymous");
+      formData.append("userEmail", user.email || "");
+      formData.append("rating", rating.toString());
+      formData.append("comment", comment.trim());
+
+      // Append images if any
+      selectedImages.forEach((image) => {
+        formData.append("images", image);
+      });
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/reviews`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            packageId,
-            packageType,
-            userName: user.name || "Anonymous",
-            userEmail: user.email || "",
-            rating,
-            comment: comment.trim(),
-          }),
-        }
+          body: formData, // Send FormData instead of JSON
+        },
       );
 
       const data = await response.json();
@@ -190,6 +264,8 @@ export default function ReviewSection({
         setShowForm(false);
         setRating(0);
         setComment("");
+        setSelectedImages([]);
+        setImagePreviewUrls([]);
         fetchReviews(); // Refresh reviews
       } else {
         showToast({
@@ -279,6 +355,60 @@ export default function ReviewSection({
                 </p>
               </div>
 
+              {/* Image Upload Section */}
+              <div>
+                <label className="block text-sm font-semibold mb-2">
+                  Add Photos (Optional)
+                </label>
+                <p className="text-xs text-gray-500 mb-3">
+                  Upload up to 3 images (Max 5MB each)
+                </p>
+
+                {/* Image Previews */}
+                {imagePreviewUrls.length > 0 && (
+                  <div className="flex flex-wrap gap-3 mb-3">
+                    {imagePreviewUrls.map((url, index) => (
+                      <div key={index} className="relative group">
+                        <Image
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                          width={120}
+                          height={120}
+                          className="w-24 h-24 object-cover rounded-lg border-2 border-gray-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Upload Button */}
+                {selectedImages.length < 3 && (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageChange}
+                      className="hidden"
+                      id="review-images"
+                    />
+                    <label
+                      htmlFor="review-images"
+                      className="inline-block px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg cursor-pointer transition-colors border border-gray-300"
+                    >
+                      📷 Add Photos ({selectedImages.length}/3)
+                    </label>
+                  </div>
+                )}
+              </div>
+
               <div className="flex gap-3">
                 <button
                   type="submit"
@@ -360,7 +490,7 @@ export default function ReviewSection({
                         height={48}
                         className="w-12 h-12 object-cover"
                         unoptimized={review.userImage.includes(
-                          "googleusercontent.com"
+                          "googleusercontent.com",
                         )}
                       />
                     ) : (
@@ -378,8 +508,30 @@ export default function ReviewSection({
 
                   <div className="mb-3">{renderStars(review.rating)}</div>
 
-                  <p className="text-gray-700 whitespace-pre-wrap">
+                  <p className="text-gray-700 whitespace-pre-wrap mb-3">
                     {review.comment}
+                  </p>
+
+                  {/* Review Images */}
+                  {review.images && review.images.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {review.images.map((imageUrl, index) => (
+                        <div key={index} className="relative group">
+                          <Image
+                            src={imageUrl}
+                            alt={`Review image ${index + 1}`}
+                            width={200}
+                            height={150}
+                            className="w-32 h-24 md:w-40 md:h-30 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => window.open(imageUrl, "_blank")}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="text-gray-500 text-sm mt-3">
+                    {format(new Date(review.createdAt), "MMM dd, yyyy")}
                   </p>
                 </div>
               </div>

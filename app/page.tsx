@@ -213,7 +213,7 @@ export default function Home() {
                           {tour.label && (
                             <span
                               className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${getLabelStyles(
-                                tour.label
+                                tour.label,
                               )}`}
                             >
                               {tour.label}
@@ -238,7 +238,7 @@ export default function Home() {
                                       <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full font-semibold">
                                         {Math.round(
                                           (1 - tour.newPrice / tour.oldPrice) *
-                                            100
+                                            100,
                                         )}
                                         % OFF
                                       </span>
@@ -294,7 +294,7 @@ export default function Home() {
                 price={tour.newPrice}
                 originalPrice={tour.oldPrice}
                 rating={tour.rating || 4.8}
-                reviewCount={tour.reviewCount || 220}
+                reviewCount={tour.adminReviewCount ?? tour.reviewCount ?? 220}
                 label={tour.label || undefined}
                 category={tour.type}
                 bookedCount={tour.bookedCount}
