@@ -2,7 +2,6 @@
 import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileContent from "@/components/profile/ProfileContent";
-import AddressContent from "@/components/profile/AddressContent";
 import MyBookingsContent from "@/components/profile/MyBookingsContent";
 import Confirmation from "@/components/ui/Confirmation";
 import { FiChevronRight } from "react-icons/fi";
@@ -64,7 +63,7 @@ export default function ProfilePage() {
 
   // Open specific tab based on URL fragment (e.g. #mybookings) or ?tab= query param
   useEffect(() => {
-    const allowed = ["profile", "address", "bookings", "signout", "delete"];
+    const allowed = ["profile", "bookings", "signout", "delete"];
 
     const applyFromLocation = () => {
       if (typeof window === "undefined") return;
@@ -166,7 +165,7 @@ export default function ProfilePage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email: user.email }),
-        }
+        },
       );
 
       const result = await response.json();
@@ -201,7 +200,6 @@ export default function ProfilePage() {
 
   const tabs = [
     { id: "profile", label: "Edit Profile" },
-    { id: "address", label: "Address & Contact" },
     { id: "bookings", label: "My Bookings" },
     { id: "signout", label: "Signout" },
     { id: "delete", label: "Delete Account" },
@@ -220,8 +218,6 @@ export default function ProfilePage() {
             image={user?.image || undefined}
           />
         );
-      case "address":
-        return <AddressContent />;
       case "bookings":
         return <MyBookingsContent />;
       default:
@@ -278,10 +274,10 @@ export default function ProfilePage() {
                   tab.id !== "delete"
                     ? "bg-primary_green/10 text-primary_green font-medium"
                     : tab.id === "signout"
-                    ? "hover:bg-red-50 text-red-600 hover:text-red-700"
-                    : tab.id === "delete"
-                    ? "hover:bg-red-50 text-red-600 hover:text-red-700"
-                    : "hover:bg-gray-100 text-gray-700"
+                      ? "hover:bg-red-50 text-red-600 hover:text-red-700"
+                      : tab.id === "delete"
+                        ? "hover:bg-red-50 text-red-600 hover:text-red-700"
+                        : "hover:bg-gray-100 text-gray-700"
                 }`}
               >
                 <span>{tab.label}</span>
