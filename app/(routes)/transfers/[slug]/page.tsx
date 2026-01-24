@@ -41,7 +41,7 @@ export async function generateMetadata({
     const response = await transferApi.getTransferBySlug(slug);
     if (!response.success || !response.data) {
       return {
-        title: "Transfer Not Found - Oastel",
+        title: "Transfer Not Found - Mossyforesttours",
         description: "The requested transfer could not be found.",
       };
     }
@@ -50,9 +50,9 @@ export async function generateMetadata({
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: "Transfer - Oastel",
+      title: "Transfer - Mossyforesttours",
       description:
-        "Comfortable transfers across Cameron Highlands with Oastel.",
+        "Comfortable transfers across Cameron Highlands with Mossyforesttours.",
     };
   }
 }
@@ -98,7 +98,7 @@ export default async function TransferDetailPage({
 
   const offerPercentage = calculateOfferPercentage(
     transferDetails.oldPrice,
-    transferDetails.newPrice
+    transferDetails.newPrice,
   );
 
   // Utility to strip HTML tags
@@ -136,7 +136,7 @@ export default async function TransferDetailPage({
     if (transfersResponse.success && toursResponse.success) {
       // Separate transfers and tours, exclude current transfer
       const availableTransfers = transfersResponse.data.filter(
-        (t: any) => t.slug !== slug
+        (t: any) => t.slug !== slug,
       );
       const availableTours = toursResponse.data;
 
@@ -464,7 +464,7 @@ export default async function TransferDetailPage({
               <TransferCard key={`transfer-${i}`} {...pkg} />
             ) : (
               <TourCard key={`tour-${i}`} {...pkg} />
-            )
+            ),
           )}
         </div>
       </section>
@@ -478,7 +478,7 @@ export default async function TransferDetailPage({
           slug: transferDetails.slug,
         }}
         relatedTransfers={otherPackages.filter(
-          (pkg) => pkg.packageType === "transfer"
+          (pkg) => pkg.packageType === "transfer",
         )}
       />
 
@@ -487,7 +487,7 @@ export default async function TransferDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
-            generateTransferStructuredData(transferDetails)
+            generateTransferStructuredData(transferDetails),
           ),
         }}
       />

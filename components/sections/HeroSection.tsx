@@ -55,8 +55,8 @@ export default function HeroSection() {
                         <span className="text-primary_green-light">Cameron Highlands</span> */}
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-            Stay cozy at Oastel · Wander the Mossy Forest · Sip Highland Tea ·
-            Find the Rafflesia
+            Stay cozy at Mossyforesttours · Wander the Mossy Forest · Sip
+            Highland Tea · Find the Rafflesia
           </p>
         </div>
 

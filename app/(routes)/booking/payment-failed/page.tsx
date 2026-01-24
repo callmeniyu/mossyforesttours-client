@@ -106,10 +106,10 @@ export default function PaymentFailedPage() {
             <p className="text-xs text-gray-500">
               Need help? Contact our support team at{" "}
               <a
-                href="mailto:support@oastel.com"
+                href="mailto:Mossyforesttours@gmail.com"
                 className="text-primary_green hover:underline"
               >
-                support@oastel.com
+                Mossyforesttours@gmail.com
               </a>
             </p>
           </div>

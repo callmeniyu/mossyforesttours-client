@@ -28,7 +28,7 @@ export default function ContactInfo() {
               <FaInstagram className="text-2xl md:text-4xl" />
             </div>
             <h4 className="mt-3 font-semibold text-title_black">Instagram</h4>
-            <p className="text-sm text-desc_gray mt-1">@oastelvibe</p>
+            <p className="text-sm text-desc_gray mt-1">@Mossyforesttours</p>
           </Link>
 
           <div className="flex flex-col items-center text-center">

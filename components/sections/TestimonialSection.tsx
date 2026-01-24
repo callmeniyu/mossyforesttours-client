@@ -15,7 +15,7 @@ const testimonials = [
   {
     name: "The Chen Family",
     avatar: `https://picsum.photos/id/239/200/200`,
-    message: `We used Oastel to book our stay and a few tours. Everything was seamless! The website made it easy to see all our options, and redirecting to book the room was simple. A one-stop shop for our vacation planning.`,
+    message: `We used Mossyforesttours to book our stay and a few tours. Everything was seamless! The website made it easy to see all our options, and redirecting to book the room was simple. A one-stop shop for our vacation planning.`,
   },
   {
     name: "David R.",

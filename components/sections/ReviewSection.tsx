@@ -137,16 +137,17 @@ export default function ReviewSection({
         showToast({
           type: "error",
           title: "Invalid File Type",
-          message: `${file.name} is not an image`,
+          message: `${file.name} is not a valid image. Please upload only JPG, PNG, or WEBP files.`,
         });
         return false;
       }
 
       if (!isValidSize) {
+        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
         showToast({
           type: "error",
           title: "File Too Large",
-          message: `${file.name} exceeds 5MB limit`,
+          message: `${file.name} (${fileSizeMB}MB) exceeds the 5MB limit. Please reduce the file size or choose a smaller image.`,
         });
         return false;
       }
@@ -268,6 +269,7 @@ export default function ReviewSection({
         setImagePreviewUrls([]);
         fetchReviews(); // Refresh reviews
       } else {
+        // Display specific error message from server
         showToast({
           type: "error",
           title: "Submission Failed",

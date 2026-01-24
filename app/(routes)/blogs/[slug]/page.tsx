@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!response.success || !response.data) {
       return {
-        title: "Blog Not Found - Oastel",
+        title: "Blog Not Found - Mossyforesttours",
         description: "The requested blog post could not be found.",
       };
     }
@@ -30,9 +30,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   } catch (error) {
     console.error("Error generating blog metadata:", error);
     return {
-      title: "Blog - Oastel",
+      title: "Blog - Mossyforesttours",
       description:
-        "Discover travel stories, tips and destination guides on Oastel's blog.",
+        "Discover travel stories, tips and destination guides on Mossyforesttours's blog.",
     };
   }
 }

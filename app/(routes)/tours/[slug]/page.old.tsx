@@ -45,7 +45,7 @@ export async function generateMetadata({
 
     if (!tour || !response.success) {
       return {
-        title: "Tour Not Found - Oastel",
+        title: "Tour Not Found - Mossyforesttours",
         description: "The requested tour could not be found.",
       };
     }
@@ -54,8 +54,9 @@ export async function generateMetadata({
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: "Tour - Oastel",
-      description: "Discover amazing tours in Cameron Highlands with Oastel.",
+      title: "Tour - Mossyforesttours",
+      description:
+        "Discover amazing tours in Cameron Highlands with Mossyforesttours.",
     };
   }
 }
@@ -102,7 +103,7 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
 
   const offerPercentage = calculateOfferPercentage(
     tourDetails.oldPrice,
-    tourDetails.newPrice
+    tourDetails.newPrice,
   );
 
   // Fetch other tours and transfers for recommendations
@@ -391,7 +392,7 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
               <TransferCard key={i} {...packageItem} />
             ) : (
               <TourCard key={i} {...packageItem} />
-            )
+            ),
           )}
         </div>
       </section>

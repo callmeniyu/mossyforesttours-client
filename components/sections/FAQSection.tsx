@@ -14,7 +14,7 @@ type FAQSectionProps = {
 
 const defaultFaqs = [
   {
-    question: "How do I book a tour with Oastel?",
+    question: "How do I book a tour with Mossyforesttours?",
     answer:
       "You can book any tour directly through our website. Just head to the “Book Tour” section, select your preferred package, date, and group size (for private tours), and complete the form. We'll confirm your booking via email or WhatsApp.",
   },
@@ -34,9 +34,9 @@ const defaultFaqs = [
       "Yes, modifications or cancellations can be made depending on the service and notice period. Each booking comes with a cancellation policy—please check the terms shown during checkout or contact us directly for help.",
   },
   {
-    question: "Where can I book accommodation with Oastel?",
+    question: "Where can I book accommodation with Mossyforesttours?",
     answer:
-      "Oastel partners with a trusted third-party platform for stays. When you click “Book Stay,” you’ll be redirected to our external accommodation portal to view rooms, pricing, and availability.",
+      "Mossyforesttours partners with a trusted third-party platform for stays. When you click “Book Stay,” you’ll be redirected to our external accommodation portal to view rooms, pricing, and availability.",
   },
   {
     question: "How will I receive my booking confirmation?",

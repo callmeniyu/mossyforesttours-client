@@ -28,11 +28,11 @@ export default function Features() {
     <section className="py-16 px-6 md:px-24 bg-white">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="section-title font-semibold font-poppins">
-          Why Oastel?
+          Why Mossyforesttours?
         </h2>
         <p className="section-desc mb-8 md:px-10">
-          At Oastel we understand that your journey is more than just a
-          destination.
+          At Mossyforesttours we understand that your journey is more than just
+          a destination.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

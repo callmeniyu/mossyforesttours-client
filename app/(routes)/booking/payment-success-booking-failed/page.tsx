@@ -17,7 +17,7 @@ export default function PaymentSuccessBookingFailedPage() {
 
   const handleContactSupport = () => {
     window.location.href =
-      "mailto:support@oastel.com?subject=Booking Issue - Payment Processed&body=Payment ID: " +
+      "mailto:Mossyforesttours@gmail.com?subject=Booking Issue - Payment Processed&body=Payment ID: " +
       paymentId;
   };
 
@@ -124,7 +124,7 @@ export default function PaymentSuccessBookingFailedPage() {
             <p className="text-xs text-gray-500">
               Questions? Email us at{" "}
               <a
-                href="mailto:support@oastel.com"
+                href="mailto:Mossyforesttours@gmail.com"
                 className="text-primary_green hover:underline"
               >
                 mossyforesttours@gmail.com
